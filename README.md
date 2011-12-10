@@ -13,12 +13,12 @@ Usage of the tool itself is quite straightforward. Open a project by selecting t
 ####Requirements for use
 Upon opening a project this tool checks whether the selected folder indeed contains a webOS software project. To enable successful detection a strict file structure is required. Within the main project folder there should be both a *app_src* folder in which all source files go, as well as a *bin* folder. Optionally *app_package* and *app_service* folders can be added to the root if such elements are required. The *bin* folder will hold packages ready for installation or further distribution. This structure is imposed to separate source and its resulting files ready for installation. The HP webOS packager tool simply grabs all files within the source folder, thus placing any unnecessary files within this place on disk will result in packages with inflated size. It is thus advised to use a separate folder for other files, documentation, and et cetera.
 
-#####Project folder structure
-** app_src - (application source files, including appinfo.json, framework_config.json, and sources.json or depends.js)
-** app_package - (optional) (package source files, including packageinfo.json)
-** app_service - (optional) (service framesource files, including services.json, framework_config.json, and sources.json or depends.js)
-** bin - (created packages go here)
-** ... - (any other folders related to the project)
+####Project folder structure
+* app_src - (application source files, including appinfo.json, framework_config.json, and sources.json or depends.js)
+* app_package - (optional) (package source files, including packageinfo.json)
+* app_service - (optional) (service framesource files, including services.json, framework_config.json, and sources.json or depends.js)
+* bin - (created packages go here)
+* ... - (any other folders related to the project)
 
 ####Known quirks
 * Tasks are handled one by one but tasks do not time out, so the application may occassionally get stuck at one task (especially when a device is not responding, such as a booting emulator). There's currently no way around this except restarting the application.
