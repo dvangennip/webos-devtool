@@ -13,12 +13,19 @@ Usage of the tool itself is quite straightforward. Open a project by selecting t
 ####Requirements for use
 Upon opening a project this tool checks whether the selected folder indeed contains a webOS software project. To enable successful detection a strict file structure is required. Within the main project folder there should be both a *app_src* folder in which all source files go, as well as a *bin* folder. Optionally *app_package* and *app_service* folders can be added to the root if such elements are required. The *bin* folder will hold packages ready for installation or further distribution. This structure is imposed to separate source and its resulting files ready for installation. The HP webOS packager tool simply grabs all files within the source folder, thus placing any unnecessary files within this place on disk will result in packages with inflated size. It is thus advised to use a separate folder for other files, documentation, and et cetera.
 
+#####Project folder structure
+** app_src - (application source files, including appinfo.json, framework_config.json, and sources.json or depends.js)
+** app_package - (optional) (package source files, including packageinfo.json)
+** app_service - (optional) (service framesource files, including services.json, framework_config.json, and sources.json or depends.js)
+** bin - (created packages go here)
+** ... - (any other folders related to the project)
+
 ####Known quirks
 * Tasks are handled one by one but tasks do not time out, so the application may occassionally get stuck at one task (especially when a device is not responding, such as a booting emulator). There's currently no way around this except restarting the application.
 * The application does not save or remember anything.
 
 ###Installation
-If you intend on developing and/or modifying this application see below for compiler instructions. If your primary interest is to use this application please have a look at my website where the latest version can be found (TODO).
+If you intend on developing and/or modifying this application see below for compiler instructions. If your primary interest is to use this application please have a look at my website where the [latest version](http://project.sinds1984.nl/) can be found.
 
 ###Compiling
 The build process is handled by [ant](http://ant.apache.org/). I am not exactly sure whether this comes standard with OS X, otherwise check the ant website for installation instructions. Type *ant* at a terminal console to check (a message about build.xml not found means it works). Ant uses the build.xml file to go through all the necessary steps for compiling this tool. The following commands are supported:
@@ -35,8 +42,11 @@ This software relies on several external Java packages as well as default HP web
 * [MacWidgets](http://code.google.com/p/macwidgets/) - Native looking Mac GUI widgets for Java (v 0.9.5)
 * [Google Gson](http://code.google.com/p/google-gson/) - JSON to Java converter package (v 1.7.1)
 * [jslint4java](http://code.google.com/p/jslint4java/) - Java wrapper around jslint (v 2.0.0)
+
+The following works have been included in this repository:
+
 * [Blueprint icon](http://shlyapnikova.deviantart.com/gallery/#/d2ug0n4) - Adopted from [Anna Shlyapnikova](http://shlyapnikova.deviantart.com/)
-* [System Executer](http://devdaily.com/java/java-processbuilder-process-system-exec) - By Alvin Alexander (included in this project)
+* [System Executer](http://devdaily.com/java/java-processbuilder-process-system-exec) - By Alvin Alexander
 
 ###Some coding notes
 I am no professional coder, so GUI and process handling is only partially disentangled. It is best seens as a lot of GUI code with a specific part meant for handling tasks (in a separate thread). Remember, code spaghetti is best eaten with a good temper :)
