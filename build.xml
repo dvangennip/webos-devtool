@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Build file for webOS develop tool -->
+
+<!-- ***************************************************************** -->
+
+<!-- Define project name, and default target.
+     Target "all" is run if no target is specified when run. -->
+
+<project basedir="." name="tag" default="all">
+
+  <!-- Define JarBundler for creating Mac OS X app bundles -->
+  <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
+
+  <!-- Define variables that we use later on -->
+  <property name="devtoolcapsname"  value="webOSdevtool"/>
+  
+  <property name="version" value="0.4"/>
+  <property name="buildnumber" value="250"/>
+  <property name="copyright" value="Creative Commons CC-BY-NC 2011, Sinds1984.nl"/>
+  <property name="information" value="A simple tool to aid in developing webOS applications."/>
+
+  <!-- Define locations for source and build trees -->
+  <property name="dir.build"     location="build"/>
+  <property name="dir.result"    location="result"/>
+  <property name="dir.release"   location="release"/>
+  <property name="dir.src"       location="src"/>
+  <property name="dir.lib"       location="lib"/>
+  <property name="dir.manifest"  location="mf"/>
+  <property name="dir.resources" location="resources"/>
+  <property name="dir.javadoc"   location="javadoc"/>
+
+  <!-- Define the total classpath for the project -->
+  <path id="project.class.path">
+    <!-- Include all JAR-files in the lib directory -->
+    <fileset dir="lib">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="init" description="Create build-directories">
+    <!-- Create the build and dist directories if they dont exist. -->
+    <mkdir dir="${dir.build}"/>
+    <mkdir dir="${dir.result}"/>
+    <mkdir dir="${dir.release}"/>
+    <mkdir dir="${dir.javadoc}"/>
+  </target>
+
+  <target name="compile" depends="init" description="Compile source code">
+    <!-- Compile all code in the source directory, put class files -->
+    <!-- in the build directory. -->
+    <javac debug="true"
+           deprecation="true"
+	   destdir="${dir.build}"
+	   source="1.6"
+	   target="1.6"
+	   srcdir="${dir.src}">
+	  <!-- <compilerarg value="-Xlint:unchecked"/> -->
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
+  
+  <!-- Move HTML file to build directory. -->
+  <target name="copyfiles" depends="compile" description="Install HTML-files.">
+    <!-- The build directory -->
+    <copy todir="${dir.build}/webosdevtool/help">
+      <fileset dir="${dir.src}/webosdevtool/help">
+		<include name="*.html"/>
+      </fileset>
+    </copy>
+    <!-- copy images -->
+    <mkdir dir="${dir.build}/webosdevtool/images"/>
+    <copy todir="${dir.build}/webosdevtool/images">
+      <fileset dir="images">
+		<include name="*.*"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="jar" depends="copyfiles" description="Build JAR-files.">
+    <!-- Create jar files. -->
+    <jar basedir="${dir.build}" compress="true"
+         destfile="${dir.result}/${devtoolcapsname}.jar"
+	 manifest="${dir.manifest}/${devtoolcapsname}.manifest"
+	 includes="**/*.class,\
+	 		   **/*.html,\
+	 		   **/*.png,\
+	 		   **/*.css">
+    </jar>
+  </target>
+  
+  <!-- Install copies of the JAR files in the test directory. -->
+  <target name="install" depends="jar" description="Install jar-files.">
+    <!-- The remote directory -->
+    <copy todir="${dir.result}">
+      <fileset dir="${dir.lib}">
+		<include name="*.jar"/>
+      </fileset>
+    </copy>
+    <!-- Message to user -->
+    <echo message="Test files installed!"/>
+  </target>
+
+  <!-- The default target. The dependency chain makes do all. -->
+  <target name="all" depends="install" description="Build everything.">
+    <echo message="Application built!"/>
+  </target>
+  
+  <!-- App bundler target. The dependency chain makes do all, plus create a Mac OS X App bundle. -->
+  <target name="app" depends="install" description="Build everything and create OS X app bundle.">
+    <jarbundler dir="${dir.release}"
+    	name="${devtoolcapsname}"
+    	mainclass="webosdevtool.Devtool"
+    	jvmversion="1.6+"
+    	icon="${dir.resources}/Blueprint.icns"
+    	version="${version}"
+        infostring="${information}"
+        build="${buildnumber}"
+        bundleid="webosdevtool.Devtool">
+       <jarfileset dir="${dir.result}">
+	       <include name="*.jar" />
+       </jarfileset>
+    </jarbundler>
+    <echo message="Application OS X bundle built!"/>
+  </target>
+  
+  <!-- Javadoc target. Generates API documentation and puts it in /javadoc folder. -->
+  <target name="javadoc" depends="init" description="">
+	<javadoc
+	     destdir="${dir.javadoc}"
+	     author="true"
+	     version="true"
+	     use="true"
+	     windowtitle="webOS developertool API"
+	     stylesheetfile="${dir.resources}/javadoc.css"
+	     access="private">
+	
+		<fileset dir="${dir.src}" defaultexcludes="yes">
+			<include name="**/*.java"/>
+			<!-- <exclude name="com/dummy/test/doc-files/**"/> -->
+		</fileset>
+		
+		<classpath>
+			<fileset dir="${dir.lib}">
+			<include name="*.jar"/>
+			</fileset>
+		</classpath>
+
+		<doctitle><![CDATA[<h1>webOS Devtool API</h1>]]></doctitle>
+		<bottom><![CDATA[<div class="footer">Creative Commons CC-BY-NC license; 2011 <a href="http://www.sinds1984.nl/">Sinds1984.nl</a>.</div>]]></bottom>
+		<tag name="to.do" scope="all" description="TODO:"/>
+		<group title="Core packages" packages="webosdevtool*"/>
+		<group title="Extra packages" packages="devdaily*"/>
+		<link offline="false" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="/" />
+		<link offline="false" href="http://exploding-pixels.com/google_code/javadoc_0.9.5/" packagelistLoc="/" />
+		<link offline="false" href="http://code.google.com/p/jslint4java/source/browse/docs/2.0.0/apidocs/" packagelistLoc="/" />
+		<link offline="false" href="http://code.google.com/p/google-gson/source/browse/trunk/gson/docs/javadocs/" packagelistLoc="/" />
+	</javadoc>
+  	<echo message="Javadoc generated!"/>
+  </target>
+
+  <!-- Clean removes all created files and directories -->
+  <target name="clean" description="Clean all buildable directories.">
+    <delete dir="${dir.release}"/>
+    <delete dir="${dir.result}"/>
+    <delete dir="${dir.build}"/>
+    <delete dir="${dir.javadoc}"/>
+  </target>
+</project>

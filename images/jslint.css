@@ -1,0 +1,9 @@
+/* FIRST LINE IS SKIPPED BY PARSER - jslint CSS style */
+body { background-color: #FFFFFF; color: #000; font-family: "Calluna", "Georgia", times, serif; font-size: 15pt; border: 0; }
+h2 { color: #333333; font-size: 20pt; font-type: bold; }
+.error { background-color: #FFCCCC; padding: 5px; margin: 10px 0; }
+.warning { background-color: #FFCC99; padding: 5px; margin: 10px 0; }
+#functions { background-color: #EEEEEE; }
+.function { background-color: #DDDDDD; margin: 0 0 5px 0; padding: 3px 5px; }
+#properties { background-color: #CCFFCC; padding: 10px; font-family: "Menlo", "Monaco", monospace; font-size: 12pt; }
+code, .evidence { font-family: "Menlo", "Monaco", monospace; font-size: 13pt; color: #0000FF; }

@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<title>webOS developer tool - Manual</title>
+	</head>
+	
+	<body>
+		<h2>Overview</h2>
+		<p>This webOS developer tool helps to streamline the packaging, installing and running of webOS software. Essentially this tool provides a GUI for the HP webOS command-line tools. For some Integrated Development Environments such tools are available, for others support is less than perfect. This standalone tool can be used separate from any IDE as it deals directly with the project folder on disk.</p>
+		<h5>Current version: <code>0.5</code></h5>
+		<h5>Suitable for webOS SDK versions: <code>1.4</code> - <code>3.0.4</code></h5>
+		<h2>How to use it</h2>
+		<p>Usage of the tool itself is quite straightforward. Open a project by selecting the project folder via the dialog. Select the desired project in the left source pane and use the options which become available on the right pane.</p>
+		<p>Alternatively one can set the options and reach specific device settings via the source list. For all common actions shortcuts are available. See the menubar for those.</p>
+		<h2>Requirements for use</h2>
+		<p>Upon opening a project this tool checks whether the selected folder indeed contains a webOS software project. To enable successful detection a strict file structure is required. Within the main project folder there should be both a src folder in which all source files go, as well as a bin folder. The bin folder will hold packages ready for installation or further distribution. This structure is imposed to separate source and its resulting files ready for installation. The HP webOS packager tool simply grabs all files within the source folder, thus placing any unnecessary files within this place on disk will result in packages with inflated size.</p>
+		<p>The required folder structure should be as follows:</p>
+		<ul>
+			<li><code>project folder</code></li>
+			<ul>
+				<li><code>bin</code> - (created packages go here)</li>
+				<li><code>app_src</code> - (application source files, including appinfo.json, framework_config.json, and sources.json or depends.js)</li>
+				<li><code>app_package</code> - (optional) (package source files, including packageinfo.json)</li>
+				<li><code>app_service</code> - (optional) (service framesource files, including services.json, framework_config.json, and sources.json or depends.js)</li>
+				<li><code>...</code> - (any other folders related to the project)</li>
+			</ul>
+		</ul>
+		<h2>Device options</h2>
+		<p>The software scans automatically for available devices and will list those accordingly in the left panel. Scanning is done periodically, so you may have to wait for up to a minute when connecting a device before it becomes available. Alternatively you can have the software refresh manually via the respective Device menu option. Make sure Developer Mode is enabled on the device. The emulator is always shown and can be launched from its info pane.</p>
+		<br />
+		<hr />
+		<h2>Credits</h2>
+		<p>This software relies on several external Java packages as well as default HP webOS tools for its main functionality and interface elements. As credit is due for the developers of those items, see the list below for the included packages and versions used. Please refer to these packages for specifics about their implementation and licenses.</p>
+		<ul>
+			<li><a href="https://developer.palm.com/content/api/dev-guide/tools/command-line-tools.html">HP webOS command-line tools</a> - As part of the SDK</li>
+			<li><a href="http://code.google.com/p/macwidgets/">MacWidgets</a> - Native looking Mac GUI widgets for Java (v 0.9.5)</li>
+			<li><a href="http://code.google.com/p/google-gson/">Google Gson</a> - JSON to Java converter package (v 1.7.1)</li>
+			<li><a href="http://code.google.com/p/jslint4java/">jslint4java</a> - Java wrapper around jslint (v 2.0.0, based on JSLint 2011-07-11)</li>
+			<li><a href="http://shlyapnikova.deviantart.com/gallery/#/d2ug0n4">Blueprint icon</a> - Thanks to Anna Shlyapnikova (<a href="http://shlyapnikova.deviantart.com/">shlyapnikova.deviantart.com</a>) for her beautiful icon design</li>
+		</ul>
+		<p>This webOS developer tool has been written by Doménique van Gennip, <a href="http://www.sinds1984.nl" title="Visit the developer">www.sinds1984.nl</a>. This software is provided as is, and free of charge. The source code is available at the aforementioned website. Despite my best intentions I cannot guarantee faultless behaviour, so test the tool before using it in critical situations. At any rate I cannot take responsibility for any harm that results from use.</p>
+		<br />
+		<hr />
+		<h2>Recent changes</h2>
+		<h3>Release v0.5</h3>
+		<ul>
+			<li>First public version.</li>
+			<li><code>Issue:</code> No automatic detection of project changes.</li>
+			<li><code>Issue:</code> High memory usage.</li>
+		</ul>
+	</body>
+</html>

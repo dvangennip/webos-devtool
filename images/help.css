@@ -1,0 +1,7 @@
+/* FIRST LINE IS SKIPPED BY PARSER - jslint CSS style */
+body { background-color: #FFFFFF; color: #000; font-family: "Calluna", "Georgia", times, serif; font-size: 15pt; border: 0; }
+h2 { color: #333333; font-size: 20pt; font-type: bold; font-family: "Lucida Grande", "Lucida Sans", helvetica, arial, sans-serif; margin: 10px 0 10px 0; }
+h3 { color: #333333; font-size: 15pt; font-type: bold; font-family: "Lucida Grande", "Lucida Sans", helvetica, arial, sans-serif; margin-bottom: 7px; }
+h5 { color: #333333; font-size: 12pt; font-type: bold; font-family: "Lucida Grande", "Lucida Sans", helvetica, arial, sans-serif; margin: 0 0 5px 5px; }
+p { margin-top: 0px; margin-bottom: 10px; }
+code { font-family: "Menlo", "Monaco", monospace; font-type: normal; font-size: 12pt; color: #660099; }
