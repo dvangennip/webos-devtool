@@ -741,6 +741,7 @@ public class TaskHandler extends Thread {
 	    }
 	    commands.add("--args"); // indicates arguments will follow
 	    commands.add("--allow-file-access-from-files"); // arg (required for Enyo to work in browser)
+	    commands.add("--enable-file-cookies"); // arg (required for Enyo to work in browser)
 	    commands.add("--disable-web-security"); // arg (required for Enyo to work in browser)
 	    
 	    // execute the command

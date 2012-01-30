@@ -4,6 +4,7 @@ build/
 javadoc/
 release/
 result/
+screenshots/
 lib/forms-1.2.1.jar
 lib/gson-1.7.1.jar
 lib/jslint4java-2.0.0.jar

@@ -49,7 +49,7 @@ The following works have been included in this repository:
 * [System Executer](http://devdaily.com/java/java-processbuilder-process-system-exec) - By Alvin Alexander
 
 ###Some coding notes
-I am no professional coder, so GUI and process handling is only partially disentangled. It is best seens as a lot of GUI code with a specific part meant for handling tasks (in a separate thread). Remember, code spaghetti is best eaten with a good temper :)
+I am no professional coder, so GUI and process handling is only partially disentangled. It is best seen as a lot of GUI code with a specific part meant for handling tasks (in a separate thread). Remember, code spaghetti is best eaten with a good temper :)
 
 ###License
 Source code is available under a [Creative Commons Attribution-NonCommercial license](http://creativecommons.org/licenses/by-nc/3.0/), so you are free to do with it as you desire. I cannot support commercial use of this code as it depends on other's open source efforts for its functionality. It would be kind (but not necessary) to let me know.
