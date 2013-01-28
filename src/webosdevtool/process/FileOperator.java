@@ -64,7 +64,7 @@ public class FileOperator {
 		// check if sources.json is valid (Mojo apps only)
 		if ( !checkSourcesFileValidity(projectFolder) ) {
 			// if not valid perhaps it is an Enyo framework application
-			if ( !checkDependsFileValidity(projectFolder) ) {
+			if ( !checkDependsFileValidity(projectFolder) && !checkPackageFileValidity(projectFolder)) {
 				// when also wrong, the folder is just wrong
 				return false;
 			}
@@ -91,11 +91,19 @@ public class FileOperator {
 	}
 	
 	/**
-	 * Uses <code>checkFileValidity</code> to check depends.js file (for Enyo apps).
+	 * Uses <code>checkFileValidity</code> to check depends.js file (for Enyo v1 apps).
 	 * @return True if the file is found to be valid.
 	 */
 	public static boolean checkDependsFileValidity (String srcFolder) {
 		return checkFileValidity( srcFolder + "/app_src/depends.js" );
+	}
+
+	/**
+	 * Uses <code>checkFileValidity</code> to check package.js file (for Enyo v2 apps).
+	 * @return True if the file is found to be valid.
+	 */
+	public static boolean checkPackageFileValidity (String srcFolder) {
+		return checkFileValidity( srcFolder + "/app_src/package.js" );
 	}
 	
 	/**
@@ -289,7 +297,10 @@ public class FileOperator {
 	private static void getProjectEnyoDependsSources (String location, Vector srcData) {
 		
 		// open the folder location's depends.js file
-		File sourcesFile = new File(location+"depends.js");
+		String sourceInfoFileName = "depends.js";
+		if (!checkDependsFileValidity(location))
+			sourceInfoFileName = "package.js"; // enyo v2
+		File sourcesFile = new File(location+sourceInfoFileName);
 		
 		// check validity
 		if ( sourcesFile.canRead() ) {
