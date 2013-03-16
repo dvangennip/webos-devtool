@@ -3,7 +3,7 @@ This webOS developer tool helps to streamline the packaging, installing and runn
 It allows webOS developers to select the default device for any actions, plus it allows one-click packaging and installation. Logging of applications is also supported. A simple implementation of [JS Lint](http://www.jslint.com/) scanning is part of the application.
 
 ### Current status
-This application was developed to target Moyo development, which required frequent packaging and uploading to a webOS emulator or device. Since the arrival of Enyo, most development can be done with the use of a browser. This means there is less need for this application, even though it is still functional. However, since the Summer of 2011 this project has not been in active development.
+This application was developed to target Moyo development, which required frequent packaging and uploading to a webOS emulator or device. Since the arrival of Enyo, most development can be done with the use of a browser. This means there is less need for this application, even though it is still functional. However, since the Summer of 2011 this project has not been in active development. Occasionally I fix a bug or add some support for Enyo as I see fit, but no major work has been done since.
 
 #### Supported platforms
 All webOS SDK versions are supported as far I have been able to determine.
@@ -42,9 +42,9 @@ The build process is handled by [ant](http://ant.apache.org/). I am not exactly 
 This software relies on several external Java packages as well as default HP webOS tools for its main functionality and interface elements. As credit is due for the developers of those items, see the list below for the included packages and versions used. Please refer to these packages for specifics about their implementation and licenses. The *jar* files of these packages should be installed in the *lib* folder of this project and be correctly referenced in the manifest file (found in *mf* folder).
 
 * [HP webOS command-line tools](https://developer.palm.com/content/api/dev-guide/tools/command-line-tools.html") - As part of the SDK
-* [MacWidgets](http://code.google.com/p/macwidgets/) - Native looking Mac GUI widgets for Java (v 0.9.5)
-* [Google Gson](http://code.google.com/p/google-gson/) - JSON to Java converter package (v 1.7.1)
-* [jslint4java](http://code.google.com/p/jslint4java/) - Java wrapper around jslint (v 2.0.0)
+* [MacWidgets](http://code.google.com/p/macwidgets/) - Native looking Mac GUI widgets for Java
+* [Google Gson](http://code.google.com/p/google-gson/) - JSON to Java converter package
+* [jslint4java](http://code.google.com/p/jslint4java/) - Java wrapper around jslint
 
 The following works have been included in this repository:
 
