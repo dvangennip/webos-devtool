@@ -101,7 +101,7 @@ public class Devtool {
 		
 		// add default devices
 		this.deviceAdd("emulator", "0", "tcp"); // emulator
-		// TODO remove
+		// TODO remove mock data
 		//this.deviceAdd("touchpad", "c69ddacef0160fad3456412420db120", "tcp 62343");
 		//this.deviceAdd("pre3", "c69ddacef0160faaaef23d3456412420db120", "tcp 62313");
 		
@@ -444,6 +444,15 @@ public class Devtool {
 			taskManager.addTask( new Task(Task.PROJECT_NEW_SCENE, currentItem, null, args) );
 		}
 	}
+
+	/**
+	 *
+	 */
+	public void projectDeploy() {
+		System.out.println("Deploying a project");
+		
+		taskManager.addTask( new Task(Task.PROJECT_DEPLOY, currentItem, null) );
+	}
 	
 	/**
 	 *
@@ -464,16 +473,14 @@ public class Devtool {
 	}
 	
 	/**
+	 * Launches a project's application on a device. The inspectable status is deprecated in webOS 2+.
+	 *
 	 * @param inspectable True if the project should be launched as inspectable, that is to be inspected with the Palm Inspector (deprecated for SDK versions 2+)
 	 */
-	public void projectLaunch(boolean inspectable) {
-		System.out.println("Running a project, as inspectable: "+inspectable);
+	public void projectLaunch() {
+		System.out.println("Running a project");
 		
-		if (inspectable) {
-			taskManager.addTask( new Task(Task.PROJECT_LAUNCH_INSPECTABLE, currentItem, currentDevice) );
-		} else {
-			taskManager.addTask( new Task(Task.PROJECT_LAUNCH, currentItem, currentDevice) );
-		}
+		taskManager.addTask( new Task(Task.PROJECT_LAUNCH, currentItem, currentDevice) );
 	}
 	
 	/**
@@ -495,16 +502,12 @@ public class Devtool {
 	}
 	
 	/**
-	 * @param inspectable True if the project should be launched as inspectable, that is to be inspected with the Palm Inspector (deprecated for SDK versions 2+)
+	 * 
 	 */
-	public void projectRun(boolean inspectable) {
-		System.out.println("Running a project, as inspectable: "+inspectable);
+	public void projectRun() {
+		System.out.println("Running a project");
 		
-		if (inspectable) {
-			taskManager.addTask( new Task(Task.PROJECT_RUN_INSPECTABLE, currentItem, currentDevice) );
-		} else {
-			taskManager.addTask( new Task(Task.PROJECT_RUN, currentItem, currentDevice) );
-		}
+		taskManager.addTask( new Task(Task.PROJECT_RUN, currentItem, currentDevice) );
 	}
 	
 	/**

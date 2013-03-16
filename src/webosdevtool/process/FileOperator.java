@@ -267,9 +267,7 @@ public class FileOperator {
 		// when done sourceData should have some data
 		
 		// only return a String[] if there is data
-		if (sourceData.size() == 0) {
-			return null;
-		} else {
+		if (sourceData.size() != 0) {
 			// create String array from Vector so it can be returned
 			String[] sources = new String[sourceData.size()];
 			try {
@@ -280,6 +278,8 @@ public class FileOperator {
 			
 			return sources;
 		}
+		// if all else fails...
+		return null;
 	}
 	
 	/**

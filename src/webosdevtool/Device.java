@@ -129,8 +129,8 @@ public class Device extends DevSourceItem {
 		// update the Enyo support variable
 		// this is based on Device version as int value (see TaskHandler for details on regex)
 		int noDotVersion = Integer.parseInt( getVersion().replaceAll("(\\d+)\\.{1}(\\d{1})\\.{1}(\\d{1})\\d*", "$1$2$3") );
-		// currently Enyo is only supported on webOS devices running versions 2.2.0+
-		if (noDotVersion >= 220) {
+		// currently Enyo is only supported on webOS devices running versions 1.4.5+
+		if (noDotVersion >= 145) {
 			this.setEnyoEnabled(true);
 		} else {
 			this.setEnyoEnabled(false);

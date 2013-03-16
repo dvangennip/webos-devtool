@@ -47,11 +47,10 @@ public class DevtoolMenuBar extends JMenuBar {
 	private AMenuItem projectMenuJSLint = null;
 	private AMenuItem projectMenuNewScene = null;
 	private AMenuItem projectMenuRun = null;
-	private AMenuItem projectMenuRunInspectable = null;
+	private AMenuItem projectMenuDeploy = null;
 	private AMenuItem projectMenuPackage = null;
 	private AMenuItem projectMenuInstall = null;
 	private AMenuItem projectMenuLaunch = null;
-	private AMenuItem projectMenuLaunchInspectable = null;
 	private AMenuItem projectMenuClose = null;
 	private AMenuItem projectMenuUninstall = null;
 	private AMenuItem projectMenuPalmLog = null;
@@ -169,20 +168,20 @@ public class DevtoolMenuBar extends JMenuBar {
 		projectMenuRun = new AMenuItem("Package, Install & Run", KeyEvent.VK_R);
 		projectMenuRun.addActionListener (new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
-			  devtool.projectRun(false);
+			  devtool.projectRun();
 			}
 	    });
 	     projectMenu.add(projectMenuRun);
-	    // Project > Run as Inspectable
-		projectMenuRunInspectable = new AMenuItem("Package, Install & Run as Inspectable", true, true, KeyEvent.VK_R);
-		projectMenuRunInspectable.addActionListener (new ActionListener () {
+	    // Separator
+		projectMenu.addSeparator();
+	    // Project > Deploy
+		projectMenuDeploy = new AMenuItem("Deploy", KeyEvent.VK_0);
+		projectMenuDeploy.addActionListener (new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
-			  devtool.projectRun(true);
+			  devtool.projectDeploy();
 			}
 	    });
-	    projectMenu.add(projectMenuRunInspectable);
-	    // Separator
-	    projectMenu.addSeparator();
+	    projectMenu.add(projectMenuDeploy);
 	    // Project > Package
 		projectMenuPackage = new AMenuItem("Package", KeyEvent.VK_1);
 		projectMenuPackage.addActionListener (new ActionListener () {
@@ -203,18 +202,10 @@ public class DevtoolMenuBar extends JMenuBar {
 		projectMenuLaunch = new AMenuItem("Launch", KeyEvent.VK_3);
 		projectMenuLaunch.addActionListener (new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
-			  devtool.projectLaunch(false);
+			  devtool.projectLaunch();
 			}
 	    });
 	    projectMenu.add(projectMenuLaunch); 
-	    // Project > LaunchInspectable
-		projectMenuLaunchInspectable = new AMenuItem("Launch as Inspectable", KeyEvent.VK_4);
-		projectMenuLaunchInspectable.addActionListener (new ActionListener () {
-			public void actionPerformed (ActionEvent e) {
-			  devtool.projectLaunch(true);
-			}
-	    });
-	    projectMenu.add(projectMenuLaunchInspectable);
 	    // Project > Close
 		projectMenuClose = new AMenuItem("Close on Device", KeyEvent.VK_5);
 		projectMenuClose.addActionListener (new ActionListener () {

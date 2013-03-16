@@ -16,14 +16,13 @@ public class Task {
 	public static final int PROJECT_PACKAGE = 3;
 	public static final int PROJECT_INSTALL = 4;
 	public static final int PROJECT_LAUNCH = 5;
-	public static final int PROJECT_LAUNCH_INSPECTABLE = 6;
 	public static final int PROJECT_CLOSE = 7;
 	public static final int PROJECT_UNINSTALL = 8;
 	public static final int PROJECT_RUN = 9;
-	public static final int PROJECT_RUN_INSPECTABLE = 10;
 	public static final int PROJECT_NEW = 11;
 	public static final int PROJECT_NEW_SCENE = 12;
 	public static final int PROJECT_OPEN_LOGGER = 13;
+	public static final int PROJECT_DEPLOY = 14;
 	
 	public static final int RESOURCE_MONITOR = 20;
 	public static final int OPEN_WEBBROWSER = 21;
@@ -90,14 +89,13 @@ public class Task {
 			case PROJECT_JSLINT: 			name = "Analyse Project with JSLint"; break;
 			case PROJECT_NEW:	 			name = "Create New Project"; break;
 			case PROJECT_NEW_SCENE:	 		name = "Add New Scene"; break;
+			case PROJECT_DEPLOY: 			name = "Deploy Project"; break;
 			case PROJECT_PACKAGE: 			name = "Package Project"; break;
 			case PROJECT_INSTALL: 			name = "Install Project"; break;
 			case PROJECT_LAUNCH: 			name = "Launch Project"; break;
-			case PROJECT_LAUNCH_INSPECTABLE: name = "Launch Project"; break;
 			case PROJECT_CLOSE: 			name = "Close Project"; break;
 			case PROJECT_UNINSTALL: 		name = "Uninstall Project"; break;
 			case PROJECT_RUN: 				name = "Run Project"; break;
-			case PROJECT_RUN_INSPECTABLE: 	name = "Run Project"; break;
 			case PROJECT_OPEN_LOGGER: 		name = "Open Palm-Log"; break;
 			case RESOURCE_MONITOR: 			name = "Open Resource Monitor"; break;
 			case DEVICE_SCAN:				name = "Scan For Devices"; break;

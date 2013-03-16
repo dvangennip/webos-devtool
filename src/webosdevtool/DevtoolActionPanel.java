@@ -54,7 +54,7 @@ public class DevtoolActionPanel extends JPanel {
  	private JButton projectPackageButton;
  	private JButton projectInstallButton;
  	private JButton projectLaunchButton;
- 	private JButton projectLaunchInspectableButton;
+ 	private JButton projectDeployButton;
  	private JButton projectUninstallButton;
  	private JButton projectRunButton;
  	private JButton projectOpenPalmLogButton;
@@ -250,6 +250,17 @@ public class DevtoolActionPanel extends JPanel {
 		
 		// add spacer
 		projectButtonPanel.add( MacWidgetFactory.createSpacer(20,0) );
+
+		// deploy button
+	    Icon deployIcon = new ImageIcon( getClass().getResource("/webosdevtool/images/button-deploy.png") );
+		projectDeployButton = new JButton(deployIcon);
+		projectDeployButton.setToolTipText("Deploy Enyo2 project (\u23180)");
+        projectDeployButton.addActionListener (new ActionListener () {
+			public void actionPerformed (ActionEvent e) {
+				devtool.projectDeploy();
+			}
+	    });
+	    projectButtonPanel.add(projectDeployButton);
 		
 		// package button
 		Icon packageIcon = new ImageIcon( getClass().getResource("/webosdevtool/images/button-package.png") );
@@ -279,21 +290,10 @@ public class DevtoolActionPanel extends JPanel {
 		projectLaunchButton.setToolTipText("Launch project on device (\u23183)");
         projectLaunchButton.addActionListener (new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
-				devtool.projectLaunch(false);
+				devtool.projectLaunch();
 			}
 	    });
 	    projectButtonPanel.add(projectLaunchButton);
-	    
-	    // launch as inspectable button
-	    Icon launchInspectableIcon = new ImageIcon( getClass().getResource("/webosdevtool/images/button-launch-inspectable.png") );
-		projectLaunchInspectableButton = new JButton(launchInspectableIcon);
-		projectLaunchInspectableButton.setToolTipText("Launch project, ready for inspector (\u23184)");
-        projectLaunchInspectableButton.addActionListener (new ActionListener () {
-			public void actionPerformed (ActionEvent e) {
-				devtool.projectLaunch(true);
-			}
-	    });
-	    projectButtonPanel.add(projectLaunchInspectableButton);
 	    
 	    // uninstall button
 	    Icon uninstallIcon = new ImageIcon( getClass().getResource("/webosdevtool/images/button-uninstall.png") );
@@ -315,7 +315,7 @@ public class DevtoolActionPanel extends JPanel {
 		projectRunButton.setToolTipText("Package, install and run project on device (\u2318R)");
         projectRunButton.addActionListener (new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
-				devtool.projectRun(false);
+				devtool.projectRun();
 			}
 	    });
 	    projectButtonPanel.add(projectRunButton);

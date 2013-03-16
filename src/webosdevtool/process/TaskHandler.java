@@ -86,30 +86,34 @@ public class TaskHandler extends Thread {
 					// use return value to determine succes
 			    	boolean success = false; // assume it goes wrong
 			    	
-			    	// call actual processing and fetch success
-			    	switch( currentTask.getTaskType() ) {
-			    		case Task.PROJECT_REVEAL: 			success = processProjectReveal(); break;
-						case Task.PROJECT_JSLINT: 			success = processProjectJSLint(); break;
-						case Task.PROJECT_NEW:	 			success = processProjectNew(); break;
-						case Task.PROJECT_NEW_SCENE:	 	success = processProjectNewScene(); break;
-						case Task.PROJECT_PACKAGE: 			success = processProjectPackage(); break;
-						case Task.PROJECT_INSTALL: 			success = processProjectInstall(); break;
-						case Task.PROJECT_LAUNCH: 			success = processProjectLaunch(false, false); break;
-						case Task.PROJECT_LAUNCH_INSPECTABLE: success = processProjectLaunch(true, false); break;
-						case Task.PROJECT_CLOSE: 			success = processProjectLaunch(false, true); break;
-						case Task.PROJECT_UNINSTALL: 		success = processProjectUninstall(); break;
-						case Task.PROJECT_RUN: 				success = processProjectRun(false); break;
-						case Task.PROJECT_RUN_INSPECTABLE: 	success = processProjectRun(true); break;
-						case Task.PROJECT_OPEN_LOGGER: 		success = processProjectOpenLogger(); break;
-						case Task.OPEN_PROJECT_IN_BROWSER:	success = processProjectOpenInBrowser(); break;
-						case Task.RESOURCE_MONITOR: 		success = processOpenResourceMonitor(); break;
-						case Task.OPEN_WEBBROWSER: 			success = processOpenWebkitBrowser(); break;
-						case Task.DEVICE_SCAN:				success = processDeviceRefreshList(); break;
-						case Task.DEVICE_REVEAL:			success = processDummy(); break;
-						case Task.DEVICE_LIST_APPS:			success = processDeviceGetApplications(); break;
-						case Task.DEVICE_START:			 	success = processDeviceStart(); break;
-						case Task.DEVICE_ENABLE_HOST_MODE:	success = processEmulatorEnableHostMode(); break;
-			    		default: 							success = true; break;
+			    	try {
+				    	// call actual processing and fetch success
+				    	switch( currentTask.getTaskType() ) {
+				    		case Task.PROJECT_REVEAL: 			success = processProjectReveal(); break;
+							case Task.PROJECT_JSLINT: 			success = processProjectJSLint(); break;
+							case Task.PROJECT_NEW:	 			success = processProjectNew(); break;
+							case Task.PROJECT_NEW_SCENE:	 	success = processProjectNewScene(); break;
+							case Task.PROJECT_DEPLOY: 			success = processProjectDeploy(); break;
+							case Task.PROJECT_PACKAGE: 			success = processProjectPackage(); break;
+							case Task.PROJECT_INSTALL: 			success = processProjectInstall(); break;
+							case Task.PROJECT_LAUNCH: 			success = processProjectLaunch(false); break;
+							case Task.PROJECT_CLOSE: 			success = processProjectLaunch(true); break;
+							case Task.PROJECT_UNINSTALL: 		success = processProjectUninstall(); break;
+							case Task.PROJECT_RUN: 				success = processProjectRun(); break;
+							case Task.PROJECT_OPEN_LOGGER: 		success = processProjectOpenLogger(); break;
+							case Task.OPEN_PROJECT_IN_BROWSER:	success = processProjectOpenInBrowser(); break;
+							case Task.RESOURCE_MONITOR: 		success = processOpenResourceMonitor(); break;
+							case Task.OPEN_WEBBROWSER: 			success = processOpenWebkitBrowser(); break;
+							case Task.DEVICE_SCAN:				success = processDeviceRefreshList(); break;
+							case Task.DEVICE_REVEAL:			success = processDummy(); break;
+							case Task.DEVICE_LIST_APPS:			success = processDeviceGetApplications(); break;
+							case Task.DEVICE_START:			 	success = processDeviceStart(); break;
+							case Task.DEVICE_ENABLE_HOST_MODE:	success = processEmulatorEnableHostMode(); break;
+				    		default: 							success = true; break;
+				    	}
+			    	} catch (Exception e) {
+			    		System.out.println("FAILED " + currentTask.getName() + ": " + e.toString() );
+			    		e.printStackTrace();
 			    	}
 			    	
 			    	// mark if successful
@@ -396,6 +400,50 @@ public class TaskHandler extends Thread {
 		// finally return
 		return true;
 	}
+
+	/**
+	 * @return Boolean value indicating success (true) or failure (false).
+	 */
+	private boolean processProjectDeploy() {
+		
+		// update item - make sure the info is in sync with real source
+		currentTask.getDevSourceItem().update();
+
+		// non-enyo2 does not need deployment
+		// TODO include a proper Enyo version check instead of this file-based assumption
+		if ( !FileOperator.checkFileValidity(currentTask.getDevSourceItem().getLocation() + "/app_src/tools/deploy.sh") ) {
+			System.out.println("No tools/deploy.sh found (not required for non-enyo2 projects).");
+			return true;
+		}
+		
+		// <source path> ./tools/deploy.sh
+		
+		// build the system command we want to run
+	    List<String> commands = new ArrayList<String>();
+	    commands.add("/bin/bash");
+	    commands.add( currentTask.getDevSourceItem().getLocation() + "/app_src/tools/deploy.sh"); // <source path>
+	    
+	    // execute the command
+	    Object[] obj = execute(commands);
+		int result = ((Integer) obj[0]); // cast as Integer
+		System.out.println(result);
+
+		// return false if result code is not 0
+		if (result >= 1) {
+			// generate feedback only for non-1 errors
+			// because usually it means those are regular compiling troubles
+			// which ought to go to a proper (scrollable) log window, not a small dialog
+			if (result >= 2) {
+				String errorMessage = ((String) obj[2]);
+				currentTask.setReport(errorMessage);
+			}
+			
+			return false;
+		}
+		
+		// nothing went wrong if we got this far
+		return true;
+	}
 	
 	/**
 	 * @return Boolean value indicating success (true) or failure (false).
@@ -404,7 +452,7 @@ public class TaskHandler extends Thread {
 		
 		// update item - make sure the info is in sync with real source
 		currentTask.getDevSourceItem().update();
-		
+
 		// palm-package -o <destination path> <source path>
 		
 		// build the system command we want to run
@@ -511,11 +559,10 @@ public class TaskHandler extends Thread {
 	}
 	
 	/**
-	 * @param inspectable True if the project should be launched as inspectable, that is to be inspected with the Palm Inspector (deprecated for SDK versions 2+)
 	 * @param close True if the project application should be closed on the device instead of opened.
 	 * @return Boolean value indicating success (true) or failure (false).
 	 */
-	private boolean processProjectLaunch(boolean inspectable, boolean close) {
+	private boolean processProjectLaunch(boolean close) {
 		
 		// CHECK ASSUMPTIONS
 		
@@ -543,8 +590,6 @@ public class TaskHandler extends Thread {
 	    commands.add("--device=" + currentTask.getDestinationDevice().getID() ); // specify device
 	    if (close) {
 	    	commands.add("-c"); // close app
-	    } else if (inspectable) {
-	    	commands.add("-i"); // mark as inspectable
 	    }
 	    commands.add( currentTask.getDevSourceItem().getID() ); // <app id>
 	
@@ -617,17 +662,19 @@ public class TaskHandler extends Thread {
 	}
 	
 	/**
-	 * @param inspectable True if the project should be launched as inspectable, that is to be inspected with the Palm Inspector (deprecated for SDK versions 2+)
 	 * @return Boolean value indicating success (true) or failure (false).
 	 */
-	private boolean processProjectRun(boolean inspectable) {
+	private boolean processProjectRun() {
 		
-		// package
-		if ( processProjectPackage() ) {
-			// install
-			if ( processProjectInstall() ) {
-				// launch
-				return processProjectLaunch(inspectable, false);
+		// deploy
+		if ( processProjectDeploy() ) {
+			// package
+			if ( processProjectPackage() ) {
+				// install
+				if ( processProjectInstall() ) {
+					// launch
+					return processProjectLaunch(false);
+				}
 			}
 		}
 		
