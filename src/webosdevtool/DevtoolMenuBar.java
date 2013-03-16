@@ -10,10 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu; //
+import javax.swing.JPopupMenu;
 
 /**
  * webOSdevtool GUI menu bar.
@@ -32,6 +33,7 @@ public class DevtoolMenuBar extends JMenuBar {
 	private JMenu projectMenu = null;
 	private JMenu deviceMenu = null;
 	private JMenu browserMenu = null;
+	private JMenu logMenu = null;
 	private JMenu windowMenu = null;
 	private JMenu helpMenu = null;
 	
@@ -66,6 +68,8 @@ public class DevtoolMenuBar extends JMenuBar {
 	private AMenuItem browserMenuOpen = null;
 	private ARadioMenuItem browserMenuSafari = null;
 	private ARadioMenuItem browserMenuChrome = null;
+	private JCheckBoxMenuItem logMenuToggleButton;
+	private AMenuItem logMenuClear = null;
 	private ButtonGroup deviceGroup = null;
 	private ButtonGroup browserGroup = null;
 	private AMenuItem windowMenuMinimize = null;
@@ -347,6 +351,27 @@ public class DevtoolMenuBar extends JMenuBar {
 			}
 	    });
 		browserMenu.add(browserMenuOpen);
+
+		// Log menu
+		JMenu logMenu = new JMenu("Log");
+		// Log > Toggle logging
+		logMenuToggleButton = new JCheckBoxMenuItem("Enable Logging", false);
+		logMenuToggleButton.addActionListener (new ActionListener () {
+			public void actionPerformed (ActionEvent e) {
+				devtool.toggleLogging();
+			}
+	    });
+	    logMenu.add(logMenuToggleButton);
+		// Separator
+	    logMenu.addSeparator();
+		// Log > Clear
+		AMenuItem logMenuClear = new AMenuItem("Clear Log");
+	    logMenuClear.addActionListener (new ActionListener () {
+			public void actionPerformed (ActionEvent e) {
+				devtool.clearLogContent();
+			}
+	    });
+	    logMenu.add(logMenuClear);
 				
 		// Window menu
 		windowMenu = new JMenu("Window");
@@ -382,6 +407,7 @@ public class DevtoolMenuBar extends JMenuBar {
 	    this.add(projectMenu);
 	    this.add(deviceMenu);
 	    this.add(browserMenu);
+	    this.add(logMenu);
 	    this.add(windowMenu);
 	    this.add(helpMenu); 
     }
@@ -549,4 +575,8 @@ public class DevtoolMenuBar extends JMenuBar {
     		browserGroup.clearSelection();
     	}
     }
+
+    protected void setLogButtonState(boolean inState) {
+		logMenuToggleButton.setSelected(inState);
+	}
 }

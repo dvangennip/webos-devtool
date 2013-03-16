@@ -39,6 +39,7 @@ public class DevtoolFrame extends JFrame
 	protected DevtoolBottomBar bottomBar = null;
 	protected DevtoolSourceList sourceList = null;
 	protected DevtoolActionPanel actionPanel = null;
+  protected DevtoolLogPane logScrollPane = null;
 
   /**
    * Creates a new DevtoolFrame service GUI.
@@ -89,13 +90,19 @@ public class DevtoolFrame extends JFrame
 	actionPanel = new DevtoolActionPanel(myParent);
 	
 	JSplitPane mainPane = MacWidgetFactory.createSplitPaneForSourceList(sourceList, actionPanel);
+
+  // Log pane in the middle
+  logScrollPane = new DevtoolLogPane();
+  logScrollPane.setPreferredSize(new Dimension(450, 150));
+  logScrollPane.setMinimumSize(new Dimension(300, 100));
 	
 	// Bottom bar
 	bottomBar = new DevtoolBottomBar(BottomBarSize.LARGE, devtool);
 	bottomBar.installWindowDraggerOnWindow(this);
 	
 	JPanel windowPanel = new JPanel(new BorderLayout());
-	windowPanel.add(mainPane, BorderLayout.CENTER);
+	windowPanel.add(mainPane, BorderLayout.NORTH);
+  windowPanel.add(logScrollPane, BorderLayout.CENTER);
 	windowPanel.add(bottomBar.getComponent(), BorderLayout.SOUTH);
 	setContentPane(windowPanel);
 
@@ -157,33 +164,42 @@ public class DevtoolFrame extends JFrame
   
   protected void setDeviceView(DevSourceItem myCurrentItem) {
   	// update actionpanel labels
-	actionPanel.setDeviceName( myCurrentItem.getName() );
-	actionPanel.setDeviceID( myCurrentItem.getID() );
-	actionPanel.setDeviceVersion( myCurrentItem.getVersion() );
-	actionPanel.setDeviceLocation( myCurrentItem.getLocation() );
-	actionPanel.setDeviceIcon( myCurrentItem.getLargeIcon() );
-	// true if ID equal to selected default device
-	Device myDevice = (Device) myCurrentItem;
-	actionPanel.setDeviceAsDefault( myDevice.getID() == devtool.currentDevice.getID() );
-	actionPanel.setDeviceAsEmulator( myDevice.isEmulator() );
-	// update actionpanel view
-	actionPanel.switchToDeviceView();
-	// update other GUI elements
-	menuBar.setDeviceView();
-	bottomBar.setDeviceView();
+  	actionPanel.setDeviceName( myCurrentItem.getName() );
+  	actionPanel.setDeviceID( myCurrentItem.getID() );
+  	actionPanel.setDeviceVersion( myCurrentItem.getVersion() );
+  	actionPanel.setDeviceLocation( myCurrentItem.getLocation() );
+  	actionPanel.setDeviceIcon( myCurrentItem.getLargeIcon() );
+  	// true if ID equal to selected default device
+  	Device myDevice = (Device) myCurrentItem;
+  	actionPanel.setDeviceAsDefault( myDevice.getID() == devtool.currentDevice.getID() );
+  	actionPanel.setDeviceAsEmulator( myDevice.isEmulator() );
+  	// update actionpanel view
+  	actionPanel.switchToDeviceView();
+  	// update other GUI elements
+  	menuBar.setDeviceView();
+  	bottomBar.setDeviceView();
   }
   
   protected void setProjectView(DevSourceItem myCurrentItem) {
   	// update actionpanel labels
-	actionPanel.setProjectName( myCurrentItem.getName() );
-	actionPanel.setProjectVersion( myCurrentItem.getVersion() );
-	actionPanel.setProjectAppID( myCurrentItem.getID() );
-	actionPanel.setProjectIcon( myCurrentItem.getLargeIcon() );
-	// update actionpanel view
-	actionPanel.switchToProjectView();
-	// update other GUI elements
-	menuBar.setProjectView();
-	bottomBar.setProjectView();
+  	actionPanel.setProjectName( myCurrentItem.getName() );
+  	actionPanel.setProjectVersion( myCurrentItem.getVersion() );
+  	actionPanel.setProjectAppID( myCurrentItem.getID() );
+  	actionPanel.setProjectIcon( myCurrentItem.getLargeIcon() );
+  	// update actionpanel view
+  	actionPanel.switchToProjectView();
+  	// update other GUI elements
+  	menuBar.setProjectView();
+  	bottomBar.setProjectView();
+  }
+
+  protected void setLogState(boolean inState) {
+    logScrollPane.setLogState(inState);
+    menuBar.setLogButtonState(inState);
+  }
+
+  void clearLogContent() {
+    logScrollPane.clearLogContent();
   }
   
   // Extra GUI methods -----------------------------------------------------

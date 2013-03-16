@@ -14,8 +14,8 @@
   <!-- Define variables that we use later on -->
   <property name="devtoolcapsname"  value="webOSdevtool"/>
   
-  <property name="version" value="0.4"/>
-  <property name="buildnumber" value="250"/>
+  <property name="version" value="0.6"/>
+  <property name="buildnumber" value="450"/>
   <property name="copyright" value="Creative Commons CC-BY-NC 2011, Sinds1984.nl"/>
   <property name="information" value="A simple tool to aid in developing webOS applications."/>
 

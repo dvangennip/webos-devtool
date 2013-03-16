@@ -19,7 +19,7 @@ import java.util.Vector;
  * Tasks are delegated to a <code>TaskManager</code> instance.
  * 
  * @author Doménique van Gennip, <a href="http://www.sinds1984.nl/">Sinds1984.nl</a>
- * @version 0.3
+ * @version 0.6
  */
 public class Devtool {
 	
@@ -29,6 +29,11 @@ public class Devtool {
 	 * Variable is true when instance desires to exit.
 	 */
 	public boolean exitStatus = false;
+
+	/**
+	 * Variable is true when log is redirected to the main window's log pane
+	 */
+	boolean loggingEnabled = false;
 	
 	/**
 	 * Separate class to manage tasks
@@ -120,6 +125,7 @@ public class Devtool {
 		
 		// START GATHERING INFO ----------
 		
+		this.setLogState(true);
 		this.deviceRefreshList();
 	}
 	
@@ -295,7 +301,7 @@ public class Devtool {
 	 * Opens a project. If successful it is added to the list.
 	 */
 	public void projectOpen(String pFolder) {
-		System.out.println("Opening a project");
+		System.out.println("\nOpening a project");
 		
 		String projectFolder = pFolder;
 		// if folder was not defined open a dialog
@@ -332,7 +338,7 @@ public class Devtool {
 	 * Close a project. It will close the currently selected project.
 	 */
 	public void projectClose() {
-		System.out.println("Closing a project");
+		System.out.println("\nClosing a project");
 		
 		boolean success = false;
 		
@@ -380,7 +386,7 @@ public class Devtool {
 	 * Close all projects. It will close the currently selected project.
 	 */
 	public void projectCloseAll() {
-		System.out.println("Closing all projects");
+		System.out.println("\nClosing all projects");
 		
 		// for length of projects vector
 		// count down as size diminishes when closing
@@ -400,7 +406,7 @@ public class Devtool {
 	 * Generate a project.
 	 */
 	public void projectNew() {
-		System.out.println("New project...");
+		System.out.println("\nNew project...");
 		// get a destination folder
 		String destinationFolder = devwindow.showFolderPickerDialog("Select Destination Folder");
 		
@@ -428,7 +434,7 @@ public class Devtool {
 	 * Generate a new scene for an existing project.
 	 */
 	public void projectNewScene() {
-		System.out.println("New scene...");
+		System.out.println("\nNew scene...");
 		
 		// ask for project name
 		String sceneName = devwindow.showInputDialog("New scene name", "Enter scene name");
@@ -449,7 +455,7 @@ public class Devtool {
 	 *
 	 */
 	public void projectDeploy() {
-		System.out.println("Deploying a project");
+		System.out.println("\nDeploying a project");
 		
 		taskManager.addTask( new Task(Task.PROJECT_DEPLOY, currentItem, null) );
 	}
@@ -458,7 +464,7 @@ public class Devtool {
 	 *
 	 */
 	public void projectPackage() {
-		System.out.println("Packaging a project");
+		System.out.println("\nPackaging a project");
 		
 		taskManager.addTask( new Task(Task.PROJECT_PACKAGE, currentItem, null) );
 	}
@@ -467,7 +473,7 @@ public class Devtool {
 	 *
 	 */
 	public void projectInstall() {
-		System.out.println("Installing a project");
+		System.out.println("\nInstalling a project");
 		
 		taskManager.addTask( new Task(Task.PROJECT_INSTALL, currentItem, currentDevice) );
 	}
@@ -478,7 +484,7 @@ public class Devtool {
 	 * @param inspectable True if the project should be launched as inspectable, that is to be inspected with the Palm Inspector (deprecated for SDK versions 2+)
 	 */
 	public void projectLaunch() {
-		System.out.println("Running a project");
+		System.out.println("\nRunning a project");
 		
 		taskManager.addTask( new Task(Task.PROJECT_LAUNCH, currentItem, currentDevice) );
 	}
@@ -487,7 +493,7 @@ public class Devtool {
 	 *
 	 */
 	public void projectCloseOnDevice() {
-		System.out.println("Closing a project on device");
+		System.out.println("\nClosing a project on device");
 		
 		taskManager.addTask( new Task(Task.PROJECT_CLOSE, currentItem, currentDevice) );
 	}
@@ -496,7 +502,7 @@ public class Devtool {
 	 *
 	 */
 	public void projectUninstall() {
-		System.out.println("Uninstalling a project");
+		System.out.println("\nUninstalling a project");
 		
 		taskManager.addTask( new Task(Task.PROJECT_UNINSTALL, currentItem, currentDevice) );
 	}
@@ -505,7 +511,7 @@ public class Devtool {
 	 * 
 	 */
 	public void projectRun() {
-		System.out.println("Running a project");
+		System.out.println("\nRunning a project");
 		
 		taskManager.addTask( new Task(Task.PROJECT_RUN, currentItem, currentDevice) );
 	}
@@ -514,7 +520,7 @@ public class Devtool {
 	 *
 	 */
 	public void projectOpenPalmLog() {
-		System.out.println("Opening palm-log window");
+		System.out.println("\nOpening palm-log window");
 		
 		taskManager.addTask( new Task(Task.PROJECT_OPEN_LOGGER, currentItem, currentDevice) );
 	}
@@ -523,7 +529,7 @@ public class Devtool {
 	 * Method opens a new Finder window focused on the project folder.
 	 */
 	public void projectRevealInFinder() {
-		System.out.println("Revealing project in Finder");
+		System.out.println("\nRevealing project in Finder");
 		
 		taskManager.addTask( new Task(Task.PROJECT_REVEAL, currentItem, null) );
 	}
@@ -532,7 +538,7 @@ public class Devtool {
 	 *
 	 */
 	public void projectJSLint() {
-		System.out.println("Scanning a project with JSLint");
+		System.out.println("\nScanning a project with JSLint");
 		
 		taskManager.addTask( new Task(Task.PROJECT_JSLINT, currentItem, null) );
 	}
@@ -542,7 +548,7 @@ public class Devtool {
 	 * in a webkit browser.
 	 */
 	public void projectOpenInBrowser() {
-		System.out.println("Opening an Enyo project in browser");
+		System.out.println("\nOpening an Enyo project in browser");
 		
 		taskManager.addTask( new Task(Task.OPEN_PROJECT_IN_BROWSER, currentItem, null) );
 	}
@@ -575,7 +581,7 @@ public class Devtool {
 	 * Or rather this method assigns this task to the TaskManager.
 	 */
 	public void openWebkitBrowser() {
-		System.out.println("Opening default webkit browser");
+		System.out.println("\nOpening default webkit browser");
 		
 		// create arguments
 		String[] args = new String[1];
@@ -794,7 +800,7 @@ public class Devtool {
 	 * for use in the software.
 	 */
 	public void deviceRefreshList() {
-		System.out.println("Refreshing device list...");
+		System.out.println("\nRefreshing device list...");
 		
 		taskManager.addTask( new Task(Task.DEVICE_SCAN, null, null) );
 	}
@@ -805,7 +811,7 @@ public class Devtool {
 	 *			   if the String equals 'currentitem' it will use the currently selected item as its device.
 	 */
 	public void deviceStart(String identifier) {
-		System.out.println("Starting a device");
+		System.out.println("\nStarting a device");
 		
 		// getDevice() will decide on which device to focus on by identifier
 		Device deviceToUse = getDevice(identifier);
@@ -824,7 +830,7 @@ public class Devtool {
 	 *			   An identifier equal to '0' implies a disabled emulator and will thus reset any data.
 	 */
 	public void deviceListApplications(String identifier) {
-		System.out.println("Listing applications on a device");
+		System.out.println("\nListing applications on a device");
 		
 		// getDevice() will decide on which device to focus on by identifier
 		Device deviceToUse = getDevice(identifier);
@@ -844,7 +850,7 @@ public class Devtool {
 	 *			   if the String equals 'currentitem' it will use the currently selected item as its device.
 	 */
 	public void deviceRevealInFinder(String identifier) {
-		System.out.println("Revealing device in Finder");
+		System.out.println("\nRevealing device in Finder");
 		
 		// getDevice() will decide on which device to focus on by identifier
 		Device deviceToUse = getDevice(identifier);
@@ -862,7 +868,7 @@ public class Devtool {
 	 *			   if the String equals 'currentitem' it will use the currently selected item as its device.
 	 */
 	public void deviceEnableHostMode(String identifier) {
-		System.out.println("Enabling Emulator Host Mode");
+		System.out.println("\nEnabling Emulator Host Mode");
 		
 		// getDevice() will decide on which device to focus on by identifier
 		Device deviceToUse = getDevice(identifier);
@@ -881,7 +887,7 @@ public class Devtool {
 	 * Opens the Resource Monitor for a specified device, app may be passed on if called from project item
 	 */
 	public void openResourceMonitor(String identifier) {
-		System.out.println("Opening HP resource monitor");
+		System.out.println("\nOpening HP resource monitor");
 		
 		if ( currentItem.isDevice() ) {
 			// getDevice() will decide on which device to focus on by identifier
@@ -935,16 +941,14 @@ public class Devtool {
 	 * @return String with information about this program.
 	 */
 	public String toString() {
-		String info = "This program assists a webOS developer by giving one-click support for common operations.";
-		
-		return info;
+		return "This program assists a webOS developer by giving one-click support for common operations.";
 	}
 	
 	/**
 	 *
 	 */
 	public void windowMinimize() {
-		System.out.println("Minimizing window");
+		//System.out.println("Minimizing window");
 		devwindow.windowMinimize();
 	}
 	
@@ -952,7 +956,7 @@ public class Devtool {
 	 *
 	 */
 	public void windowZoom() {
-		System.out.println("Zooming window");
+		//System.out.println("Zooming window");
 		devwindow.windowZoom();
 	}
 	
@@ -960,7 +964,7 @@ public class Devtool {
 	 * Show a manual
 	 */
 	public void windowShowHelp() {
-		System.out.println("Showing manual");
+		//System.out.println("Showing manual");
 		
 		// using a new Thread
 		new Thread (new Runnable () {
@@ -988,6 +992,26 @@ public class Devtool {
 			}
 	    }).start ();
 	    */
+	}
+
+	boolean toggleLogging() {
+		loggingEnabled = !loggingEnabled;
+		this.setLogState(loggingEnabled);
+		return loggingEnabled;
+	}
+
+	/*
+	 * @param inState Enables or disables the use of the log pane in the main window.
+	 * If enabled, the System.out (STDOUT) will be redirected to the pane.
+	 * Disable to get STDOUT to the terminal
+	 */
+	void setLogState(boolean inState) {
+		loggingEnabled = inState;
+		this.devwindow.setLogState(inState);
+	}
+
+	void clearLogContent() {
+		this.devwindow.clearLogContent();
 	}
 	
 	/**
@@ -1019,6 +1043,7 @@ public class Devtool {
 				} while ( taskManager.hasTasks() && naps > 0);
 				
 				// End it all
+				setLogState(false);
 				System.exit (0);	// Exit the JVM 
 			}
 	    }).start ();
