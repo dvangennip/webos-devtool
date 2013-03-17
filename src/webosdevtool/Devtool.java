@@ -312,6 +312,15 @@ public class Devtool {
 		// check whether project folder is defined by now
 		// if so, check validity and open
 		if (projectFolder != null) {
+
+			// check if no project is open with such folder
+			for (int i = 0; i < projects.size(); i++) {
+				Project p = (Project) projects.elementAt(i);
+				if (p.getLocation().equals(projectFolder)) {
+					System.out.println("Project has already been opened: see " + p.getName());
+					return;
+				}
+			}
 			
 			// when project is OK
 			if ( fileOperator.checkProjectFolderValidity(projectFolder) ) {
