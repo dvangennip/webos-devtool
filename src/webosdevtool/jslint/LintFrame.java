@@ -319,6 +319,11 @@ public class LintFrame extends JFrame {
 		lint.addOption(Option.PREDEF, "$L,$,Ajax,Mojo,enyo,window,StageAssistant,AppAssistant,Element"); // predefined global variables
     lint.addOption(Option.TODO); // todo comments allowed
 		
+    if (sources == null) {
+      viewerPanel.setPlainTextContent("<h3>This project has no identifiable Javascript sources.</h3>");
+      return;
+    }
+
 		for (int i = 0; i < sources.length; i++) {
 			
 			LintSourceListItem li = new LintSourceListItem(sources[i], projectFolder+"/app_src/"+sources[i]);

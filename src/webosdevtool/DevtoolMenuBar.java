@@ -44,6 +44,7 @@ public class DevtoolMenuBar extends JMenuBar {
 	private AMenuItem fileMenuOpen = null;
 	private AMenuItem fileMenuClose = null;
 	private AMenuItem fileMenuCloseAll = null;
+	private AMenuItem fileMenuRefresh = null;
 	private AMenuItem projectMenuRevealFinder = null;
 	private AMenuItem projectMenuUpdateInfo = null;
 	private AMenuItem projectMenuJSLint = null;
@@ -127,6 +128,16 @@ public class DevtoolMenuBar extends JMenuBar {
 			}
 	    });
 	    fileMenu.add(fileMenuCloseAll);
+	    // Separator
+	    fileMenu.addSeparator();
+	    // File > Refresh Devices and Data
+		fileMenuRefresh = new AMenuItem("Refresh Devices & Data", KeyEvent.VK_F5, true);
+		fileMenuRefresh.addActionListener (new ActionListener () {
+			public void actionPerformed (ActionEvent e) {
+			  devtool.refreshAll();
+			}
+	    });
+	    fileMenu.add(fileMenuRefresh);
 		
 		// Project menu
 		projectMenu = new JMenu("Project");
@@ -258,7 +269,7 @@ public class DevtoolMenuBar extends JMenuBar {
 	    // Device menu
 	    deviceMenu = new JMenu("Devices");
 	    // Device > Refresh device list
-		deviceMenuRefresh = new AMenuItem("Refresh Device List", KeyEvent.VK_F5, true);
+		deviceMenuRefresh = new AMenuItem("Refresh Device List");
 		deviceMenuRefresh.addActionListener (new ActionListener () {
 			public void actionPerformed (ActionEvent e) {
 			  devtool.deviceRefreshList();

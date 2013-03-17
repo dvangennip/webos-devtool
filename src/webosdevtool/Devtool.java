@@ -444,6 +444,11 @@ public class Devtool {
 	 */
 	public void projectNewScene() {
 		System.out.println("\nNew scene...");
+
+		if (currentItem.isEnyoEnabled()) {
+			System.out.println("Project is based on Enyo, only Mojo projects can have scenes added.");
+			return;
+		}
 		
 		// ask for project name
 		String sceneName = devwindow.showInputDialog("New scene name", "Enter scene name");
@@ -1021,6 +1026,17 @@ public class Devtool {
 
 	void clearLogContent() {
 		this.devwindow.clearLogContent();
+	}
+
+	/**
+	 * Refreshes both device list, as well as each project
+	 */
+	void refreshAll() {
+		this.deviceRefreshList();
+
+		for (int i = 0; i < projects.size(); i++) {
+			((Project) projects.elementAt(i)).update();
+		}
 	}
 	
 	/**

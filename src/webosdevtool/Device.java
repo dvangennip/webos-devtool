@@ -83,17 +83,34 @@ public class Device extends DevSourceItem {
 	 * @param name Name of the device
 	 */
 	@Override
-	public void setName(String name) {
-		String newName = name;
-		newName = newName.replace("emulator","Emulator");
-		//newName = newName.replace("touchpad", "TouchPad");
-		//newName = newName.replace("pre", "Pre");
-		//newName = newName.replace("pixi", "Pixi");
-		//newName = newName.replace("veer", "Veer");
-		//newName = newName.replace("plus", "Plus");
-		newName = newName.replace("topaz-linux", "TouchPad");
-		newName = newName.replace("roadrunner-linux", "Pre2");
-		newName = newName.replace("mantaray-linux", "Pre3");
+	public void setName(String inName) {
+		String name = inName.toLowerCase();
+		
+		if (name.contains("castle")) {
+			result = "Palm Pre";
+		} else if (name.contains("pixie")) {
+			result = "Palm Pixi";
+		} else if (name.contains("verizon") && name.contains("pixie")) {
+			result = "Palm Pixi Plus";
+		} else if (name.contains("castleplus")) {
+			result = "Palm Pre Plus";
+		} else if (name.contains("roadrunner")) {
+			result = "Palm Pre2";
+		} else if (name.contains("broadway")) {
+			result = "HP Veer";
+		} else if (name.contains("mantaray")) {
+			result = "HP Pre3";
+		} else if (name.contains("topaz")) {
+			result = "HP TouchPad";
+		} else if (name.contains("opal")) {
+			result = "HP TouchPad Go";
+		} else if (name.contains("stingray")) {
+			result = "Stingray";
+		} else if (name.contains("windsor")) {
+			result = "Windsor";
+		} else if (name.contains("sdk") || name.contains("emulator")) {
+			result = "Emulator";
+		}
 		
 		super.setName(newName);
 	}

@@ -1,2 +1,2 @@
 Main-Class: webosdevtool.Devtool
-Class-Path: webOSdevtool.jar forms-1.2.1.jar mac_widgets-0.9.5.jar gson-1.7.1.jar jslint4java-2.0.3.jar
+Class-Path: webOSdevtool.jar forms-1.2.1.jar mac_widgets-0.9.5.jar gson-2.2.2.jar jslint4java-2.0.3.jar

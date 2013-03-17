@@ -6,6 +6,7 @@ package webosdevtool;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
@@ -27,6 +28,7 @@ public class DevtoolBottomBar extends BottomBar
     private final JLabel activityIndicator = MacWidgetFactory.createEmphasizedLabel("Ready");
     private JButton addButton = new JButton(MacIcons.PLUS);
 	private JButton removeButton = new JButton(MacIcons.MINUS);
+    private JButton refreshButton;
 
     // Constructor
     
@@ -53,11 +55,23 @@ public class DevtoolBottomBar extends BottomBar
 				devtool.projectClose();
 			}
 	    });
+
+        // refresh button
+        ImageIcon refreshIcon = new ImageIcon( getClass().getResource("/webosdevtool/images/button-small-refresh.png") );
+        refreshButton = new JButton(refreshIcon);
+        refreshButton.setToolTipText("Refresh everything (F5)");
+        refreshButton.putClientProperty("JButton.buttonType", "textured");
+        refreshButton.addActionListener (new ActionListener () {
+            public void actionPerformed (ActionEvent e) {
+                devtool.refreshAll();
+            }
+        });
         
         // add to bottombar
         this.addComponentToLeft(addButton);
         this.addComponentToLeft(removeButton);
         this.addComponentToCenter(activityIndicator);
+        this.addComponentToRight(refreshButton);
     }
     
     // Methods
