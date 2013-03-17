@@ -79,8 +79,8 @@ public class LintFrame extends JFrame {
     devtool = myParent;
     
     // prevent the JFrame from disappearing on clicking the close button
-	// rather keep it open and show what happens
-	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+	  // rather keep it open and show what happens
+	  setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
     // Create a menu bar to hold the menus.
     menuBar = new JMenuBar();
@@ -311,12 +311,13 @@ public class LintFrame extends JFrame {
 		JSLint lint = new JSLintBuilder().fromDefault();
 		// set options if necessary
 		lint.addOption(Option.SLOPPY); // no need to include 'use strict;'
-		lint.addOption(Option.CONFUSION); // type confusion allowed (e.g. var = "string" + number;)
+		//lint.addOption(Option.CONFUSION); // type confusion allowed (e.g. var = "string" + number;)
 		lint.addOption(Option.CONTINUE); // continue; statement allowed
 		lint.addOption(Option.WHITE); // sloppy white space allowed
 		lint.addOption(Option.PLUSPLUS); // ++ and -- allowed
 		lint.addOption(Option.REGEXP); // . and [^ ..] allowed in regex
 		lint.addOption(Option.PREDEF, "$L,$,Ajax,Mojo,enyo,window,StageAssistant,AppAssistant,Element"); // predefined global variables
+    lint.addOption(Option.TODO); // todo comments allowed
 		
 		for (int i = 0; i < sources.length; i++) {
 			

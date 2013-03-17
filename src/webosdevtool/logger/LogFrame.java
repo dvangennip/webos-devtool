@@ -285,10 +285,9 @@ public class LogFrame extends JFrame {
 		// parse new content
 		addition += "\n";
 		// add a linefeed at the beginning if content signals an app restart
-		/*
 		if (addition.contains("/usr/palm/frameworks")) {
 			addition = "\n" + addition;
-		}*/
+		}
 		
 		// add new content
 		logFresh = false;
