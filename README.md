@@ -2,7 +2,7 @@ This webOS developer tool helps to streamline the packaging, installing and runn
 
 It allows webOS developers to select the default device for any actions, plus it allows one-click packaging and installation. Logging of applications is also supported. A simple implementation of [JS Lint](http://www.jslint.com/) scanning is part of the application.
 
-[![](http://dvangennip.github.com/webos-devtool/screenshot.png)](http://dvangennip.github.com/webos-devtool/screenshot.png) 
+[![](https://raw.github.com/dvangennip/webos-devtool/master/screenshot.png)](https://raw.github.com/dvangennip/webos-devtool/master/screenshot.png)
 
 ### Current status
 This application was developed to target Moyo development, which required frequent packaging and uploading to a webOS emulator or device. Since the arrival of Enyo, most development can be done with the use of a browser. This means there is less need for this application, even though it is still functional. However, since the Summer of 2011 this project has not been in active development. Occasionally I fix a bug or add some support for Enyo as I see fit, but no major work has been done since.
@@ -32,14 +32,14 @@ Upon opening a project this tool checks whether the selected folder indeed conta
 
 
 ```sh
-	# set working directory to project root (avoids misconfigured path errors)
-	PROJECT_ROOT="$TOOLS/.."
-	cd $PROJECT_ROOT
+# set working directory to project root (avoids misconfigured path errors)
+PROJECT_ROOT="$TOOLS/.."
+cd $PROJECT_ROOT
 
-	# make sure node is available in path (default location is /usr/local/bin/node)
-	export PATH="/usr/local/bin:$PATH"
+# make sure node is available in path (default location is /usr/local/bin/node)
+export PATH="/usr/local/bin:$PATH"
 
-	# ADD THESE LINES BEFORE THE ONE THAT SAYS check for node, but quietly
+# ADD THESE LINES BEFORE THE ONE THAT SAYS check for node, but quietly
 ```
 
 ### Installation
