@@ -2,6 +2,8 @@ This webOS developer tool helps to streamline the packaging, installing and runn
 
 It allows webOS developers to select the default device for any actions, plus it allows one-click packaging and installation. Logging of applications is also supported. A simple implementation of [JS Lint](http://www.jslint.com/) scanning is part of the application.
 
+[![](http://dvangennip.github.com/webos-devtool/screenshot.png)](http://dvangennip.github.com/webos-devtool/screenshot.png) 
+
 ### Current status
 This application was developed to target Moyo development, which required frequent packaging and uploading to a webOS emulator or device. Since the arrival of Enyo, most development can be done with the use of a browser. This means there is less need for this application, even though it is still functional. However, since the Summer of 2011 this project has not been in active development. Occasionally I fix a bug or add some support for Enyo as I see fit, but no major work has been done since.
 
@@ -17,15 +19,28 @@ Usage of the tool itself is quite straightforward. Open a project by selecting t
 Upon opening a project this tool checks whether the selected folder indeed contains a webOS software project. To enable successful detection a strict file structure is required. Within the main project folder there should be both a *app_src* folder in which all source files go, as well as a *bin* folder. Optionally *app_package* and *app_service* folders can be added to the root if such elements are required. The *bin* folder will hold packages ready for installation or further distribution. This structure is imposed to separate source and its resulting files ready for installation. The HP webOS packager tool simply grabs all files within the source folder, thus placing any unnecessary files within this place on disk will result in packages with inflated size. It is thus advised to use a separate folder for other files, documentation, and et cetera.
 
 #### Project folder structure
-* app_src - (application source files, including appinfo.json, framework_config.json, and sources.json or depends.js)
-* app_package - (optional) (package source files, including packageinfo.json)
-* app_service - (optional) (service framesource files, including services.json, framework_config.json, and sources.json or depends.js)
-* bin - (created packages go here)
+* `app_src` - (application source files, including `appinfo.json`, `framework_config.json`, and `sources.json` or `depends.js`)
+* `app_package` - (optional) (package source files, including `packageinfo.json`)
+* `app_service` - (optional) (service framesource files, including `services.json`, `framework_config.json`, and `sources.json` or `depends.js`)
+* `bin` - (created packages go here)
 * ... - (any other folders related to the project)
 
 #### Known quirks
 * Tasks are handled one by one but tasks do not time out, so the application may occassionally get stuck at one task (especially when a device is not responding, such as a booting emulator). There's currently no way around this except restarting the application.
 * The application does not save or remember anything.
+* Using the deploy functionality for Enyo2 projects suffers from path and working directory problems. This is fixed by adding a few lines to the project's `<boilerplate-folder>/tools/deploy.sh` file:
+
+
+```sh
+	# set working directory to project root (avoids misconfigured path errors)
+	PROJECT_ROOT="$TOOLS/.."
+	cd $PROJECT_ROOT
+
+	# make sure node is available in path (default location is /usr/local/bin/node)
+	export PATH="/usr/local/bin:$PATH"
+
+	# ADD THESE LINES BEFORE THE ONE THAT SAYS check for node, but quietly
+```
 
 ### Installation
 If you intend on developing and/or modifying this application see below for compiler instructions. If your primary interest is to use this application please have a look at my website where the [latest version](http://project.sinds1984.nl/) can be found.
@@ -33,10 +48,10 @@ If you intend on developing and/or modifying this application see below for comp
 ### Compiling
 The build process is handled by [ant](http://ant.apache.org/). I am not exactly sure whether this comes standard with OS X, otherwise check the ant website for installation instructions. Type *ant* at a terminal console to check (a message about build.xml not found means it works). Ant uses the build.xml file to go through all the necessary steps for compiling this tool. The following commands are supported:
 
-* ant - default action which compiles the application into a self-executable jar file (for testing purposes)
-* ant app - compiles the project and creates a nice webOSdevtool.app package (can be put in your Applications folder)
-* ant javadoc - generates documentation in HTML files
-* ant clean - cleans all existing built files and documentation
+* `ant` - default action which compiles the application into a self-executable jar file (for testing purposes)
+* `ant app` - compiles the project and creates a nice webOSdevtool.app package (can be put in your Applications folder)
+* `ant javadoc` - generates documentation in HTML files
+* `ant clean` - cleans all existing built files and documentation
 
 ### Credits
 This software relies on several external Java packages as well as default HP webOS tools for its main functionality and interface elements. As credit is due for the developers of those items, see the list below for the included packages and versions used. Please refer to these packages for specifics about their implementation and licenses. The *jar* files of these packages should be installed in the *lib* folder of this project and be correctly referenced in the manifest file (found in *mf* folder).
@@ -52,7 +67,7 @@ The following works have been included in this repository:
 * [System Executer](http://devdaily.com/java/java-processbuilder-process-system-exec) - By Alvin Alexander
 
 ### Some coding notes
-I am no professional coder, so GUI and process handling is only partially disentangled. It is best seen as a lot of GUI code with a specific part meant for handling tasks (in a separate thread). Remember, code spaghetti is best eaten with a good temper :)
+This app was my first try at coding something a little more complex (development started in March 2011), so GUI and process handling is only partially disentangled. It is best seen as a lot of GUI code with a specific part meant for handling tasks (in a separate thread). Remember, code spaghetti is best eaten with a good temper :)
 
 ### License
 Source code is available under a [Creative Commons Attribution-NonCommercial license](http://creativecommons.org/licenses/by-nc/3.0/), so you are free to do with it as you desire. I cannot support commercial use of this code as it depends on other's open source efforts for its functionality. It would be kind (but not necessary) to let me know.
