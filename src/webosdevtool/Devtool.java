@@ -106,9 +106,6 @@ public class Devtool {
 		
 		// add default devices
 		this.deviceAdd("emulator", "0", "tcp"); // emulator
-		// TODO remove mock data
-		//this.deviceAdd("touchpad", "c69ddacef0160fad3456412420db120", "tcp 62343");
-		//this.deviceAdd("pre3", "c69ddacef0160faaaef23d3456412420db120", "tcp 62313");
 		
 		// set default device and view
 		try {
@@ -313,32 +310,34 @@ public class Devtool {
 		// if so, check validity and open
 		if (projectFolder != null) {
 
-			// check if no project is open with such folder
-			for (int i = 0; i < projects.size(); i++) {
-				Project p = (Project) projects.elementAt(i);
-				if (p.getLocation().equals(projectFolder)) {
-					System.out.println("Project has already been opened: see " + p.getName());
-					return;
+			synchronized(projects) {
+				// check if no project is open with such folder
+				for (int i = 0; i < projects.size(); i++) {
+					Project p = (Project) projects.elementAt(i);
+					if (p.getLocation().equals(projectFolder)) {
+						System.out.println("Project has already been opened: see " + p.getName());
+						return;
+					}
 				}
-			}
-			
-			// when project is OK
-			if ( fileOperator.checkProjectFolderValidity(projectFolder) ) {
 				
-				System.out.println("Folder valid: "+projectFolder);
+				// when project is OK
+				if ( fileOperator.checkProjectFolderValidity(projectFolder) ) {
 					
-				// add project to list
-				projects.add(new Project(this, null, projectFolder));
-				this.devwindow.menuBar.setCloseAllProjectsView( projects.size() );
-				
-				// view the new project
-				try {
-					setCurrentItem( ((DevSourceItem) projects.lastElement() ) );
+					System.out.println("Folder valid: "+projectFolder);
+						
+					// add project to list
+					projects.add(new Project(this, null, projectFolder));
+					this.devwindow.menuBar.setCloseAllProjectsView( projects.size() );
+					
+					// view the new project
+					try {
+						setCurrentItem( ((DevSourceItem) projects.lastElement() ) );
+					}
+					catch (java.util.NoSuchElementException nsee) {}
+				} else {
+					// TODO add info dialog
+					System.out.println("Folder NOT valid: "+projectFolder);
 				}
-				catch (java.util.NoSuchElementException nsee) {}
-			} else {
-				// TODO add info dialog
-				System.out.println("Folder NOT valid: "+projectFolder);
 			}
 		}
 	}
@@ -355,28 +354,30 @@ public class Devtool {
 		// that is, no tasks scheduled for this project
 		if ( taskManager.getNumberOfTasksForItem( currentItem ) == 0) {
 			
-			// get index for later use (switch view to another, nearby item)
-			int currentIndex = projects.indexOf(currentItem);
-			// call dispose methods if available
-			currentItem.dispose();
-			// remove project from Vector list
-			projects.remove(currentItem);
-			
-			// switch view
-			DevSourceItem refocusItem = null;
-			// define whereto
-			if ( projects.size() == 0) {
-				// no projects, select first device instead (Emulator is always there)
-				refocusItem = (DevSourceItem) devices.firstElement();
-			} else {
-				// switch to project above currently removed one
-				if (currentIndex > 0) {
-					currentIndex--;
+			synchronized(projects) {
+				// get index for later use (switch view to another, nearby item)
+				int currentIndex = projects.indexOf(currentItem);
+				// call dispose methods if available
+				currentItem.dispose();
+				// remove project from Vector list
+				projects.remove(currentItem);
+				
+				// switch view
+				DevSourceItem refocusItem = null;
+				// define whereto
+				if ( projects.size() == 0) {
+					// no projects, select first device instead (Emulator is always there)
+					refocusItem = (DevSourceItem) devices.firstElement();
+				} else {
+					// switch to project above currently removed one
+					if (currentIndex > 0) {
+						currentIndex--;
+					}
+					refocusItem = (DevSourceItem) projects.elementAt( currentIndex );
 				}
-				refocusItem = (DevSourceItem) projects.elementAt( currentIndex );
+				// set new view
+				setCurrentItem( refocusItem );
 			}
-			// set new view
-			setCurrentItem( refocusItem );
 			
 			// TODO - catch non-success cases
 			success = true;
@@ -700,6 +701,7 @@ public class Devtool {
 				d.setID(identifier); // useful for emulators, no change for other devices
 				d.setLocation(location);
 				// get version and installed apps
+				this.deviceGetLogLevel(identifier);
 				this.deviceListApplications(identifier);
 			}
 			
@@ -879,7 +881,7 @@ public class Devtool {
 	
 	/**
 	 * @param identifier String value, if <code>null</code> it will use the default device,
-	 *			   if the String equals 'currentitem' it will use the currently selected item as its device.
+	 *			if the String equals 'currentitem' it will use the currently selected item as its device.
 	 */
 	public void deviceEnableHostMode(String identifier) {
 		System.out.println("\nEnabling Emulator Host Mode");
@@ -890,9 +892,53 @@ public class Devtool {
 		if (deviceToUse == null) {
 			// TODO no device found warning message
 		} else {
-			// add task
 			taskManager.addTask( new Task(Task.DEVICE_ENABLE_HOST_MODE, null, deviceToUse) );
-		}		
+		}
+	}
+
+	/**
+	 * Because of the asynchronous nature of the task, this method cannot immediately return any value.
+	 * TODO: this does not work at the moment, as there is no console command to get info.
+	 *
+	 * @param identifier String value, if <code>null</code> it will use the default device,
+	 *			if the String equals 'currentitem' it will use the currently selected item as its device.
+	 */
+	public void deviceGetLogLevel(String deviceID) {
+		System.out.println("\nGetting device log level is not yet implemented.");
+		// // getDevice() will decide on which device to focus on by identifier
+		// Device deviceToUse = getDevice(deviceID);
+
+		// if (deviceToUse == null) {
+		// 	System.out.println("\nNo device selected or available to get log level.");
+		// } else {
+		// 	taskManager.addTask( new Task(Task.DEVICE_LOG_LEVEL, null, deviceToUse, null) );
+		// }
+	}
+
+	/**
+	 * Sets log level for a device
+	 *
+	 * @param identifier String value, if <code>null</code> it will use the default device,
+	 *			if the String equals 'currentitem' it will use the currently selected item as its device.
+	 * @param level The log level to be set as <code>String</code>.
+	 */
+	public void deviceSetLogLevel(String deviceID, String level) {
+		if (level == null) {
+			System.out.println("\nNo log level was given, thus no device log level set.");
+		} else {
+			System.out.println("\nSetting device log level to: " + level);
+			
+			// getDevice() will decide on which device to focus on by identifier
+			Device deviceToUse = getDevice(deviceID);
+
+			if (deviceToUse == null) {
+				System.out.println("\nNo device selected or available to set log level.");
+			} else {
+				deviceToUse.setLogLevel(level, false);
+				String[] args = { level };
+				taskManager.addTask( new Task(Task.DEVICE_LOG_LEVEL, null, deviceToUse, args) );
+			}
+		}
 	}
 	
 	// Resource Monitor ---------------------------------------------------

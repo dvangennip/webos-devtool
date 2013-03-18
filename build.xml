@@ -16,7 +16,7 @@
   
   <property name="version" value="0.6"/>
   <property name="buildnumber" value="450"/>
-  <property name="copyright" value="Creative Commons CC-BY-NC 2011, Sinds1984.nl"/>
+  <property name="copyright" value="Creative Commons CC-BY-NC 2013, Sinds1984.nl"/>
   <property name="information" value="A simple tool to aid in developing webOS applications."/>
 
   <!-- Define locations for source and build trees -->
@@ -146,13 +146,13 @@
 		</classpath>
 
 		<doctitle><![CDATA[<h1>webOS Devtool API</h1>]]></doctitle>
-		<bottom><![CDATA[<div class="footer">Creative Commons CC-BY-NC license; 2011 <a href="http://www.sinds1984.nl/">Sinds1984.nl</a>.</div>]]></bottom>
+		<bottom><![CDATA[<div class="footer">Creative Commons CC-BY-NC license; 2013 <a href="http://www.sinds1984.nl/">Sinds1984.nl</a>.</div>]]></bottom>
 		<tag name="to.do" scope="all" description="TODO:"/>
 		<group title="Core packages" packages="webosdevtool*"/>
 		<group title="Extra packages" packages="devdaily*"/>
 		<link offline="false" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="/" />
 		<link offline="false" href="http://exploding-pixels.com/google_code/javadoc_0.9.5/" packagelistLoc="/" />
-		<link offline="false" href="http://code.google.com/p/jslint4java/source/browse/docs/2.0.0/apidocs/" packagelistLoc="/" />
+		<link offline="false" href="http://code.google.com/p/jslint4java/source/browse/docs/2.2.2/apidocs/" packagelistLoc="/" />
 		<link offline="false" href="http://code.google.com/p/google-gson/source/browse/trunk/gson/docs/javadocs/" packagelistLoc="/" />
 	</javadoc>
   	<echo message="Javadoc generated!"/>

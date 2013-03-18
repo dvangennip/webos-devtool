@@ -108,6 +108,7 @@ public class TaskHandler extends Thread {
 							case Task.DEVICE_REVEAL:			success = processDummy(); break;
 							case Task.DEVICE_LIST_APPS:			success = processDeviceGetApplications(); break;
 							case Task.DEVICE_START:			 	success = processDeviceStart(); break;
+							case Task.DEVICE_LOG_LEVEL:			success = processDeviceLogLevel(); break;
 							case Task.DEVICE_ENABLE_HOST_MODE:	success = processEmulatorEnableHostMode(); break;
 				    		default: 							success = true; break;
 				    	}
@@ -710,7 +711,7 @@ public class TaskHandler extends Thread {
 	 */
 	private boolean processProjectOpenLogger() {
 		// let everything be handled by a LogFrame instance
-		new LogFrame( currentTask.getDevSourceItem().getID(), currentTask.getDestinationDevice().getID() );
+		new LogFrame( currentTask.getDevSourceItem().getID(), currentTask.getDestinationDevice() );
 		return true;
 	}
 	
@@ -1019,7 +1020,44 @@ public class TaskHandler extends Thread {
 		// return successfully
 		return true;
 	}
+
+	/**
+	 * @return Boolean value indicating success (true) or failure (false).
+	 */
+	private boolean processDeviceLogLevel() {
+		
+		// palm-log -d usb --system-log-level <info|warning|error|integer 0-100>
+
+		// build the system command we want to run
+	    List<String> commands = new ArrayList<String>();
+	    commands.add("/bin/bash");
+	    commands.add("/opt/PalmSDK/Current/bin/palm-log"); // palm-log
+	    commands.add("--device=" + currentTask.getDestinationDevice().getID() ); // specify device
+	    commands.add("--system-log-level"); // set log level
+	    if (currentTask.getArguments() != null) { // otherwise it is a get request
+	    	commands.add( currentTask.getArguments()[0] ); // <level>
+	    }
 	
+	    // execute the command
+	    Object[] obj = execute(commands);
+		int result = ((Integer) obj[0]); // cast as Integer
+		
+		// return false if result code is not 0
+		if (result >= 1) {
+			// generate feedback
+			String errorMessage = ((String) obj[2]);
+			currentTask.setReport(errorMessage);
+			return false;
+		} //else {
+			//String report = (String) obj[1];
+			// use feedback to set log level variable in device data
+			//currentTask.getDestinationDevice().setLogLevel(feedbackLevel, false);
+		//}
+				
+		// return successfully
+		return true;
+	}
+
 	/**
 	 * @return Boolean value indicating success (true) or failure (false).
 	 */

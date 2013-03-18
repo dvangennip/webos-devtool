@@ -16,7 +16,10 @@ public class Device extends DevSourceItem {
 	public static final int EMULATOR = 0;
 	public static final int PHONE = 1;
 	public static final int TABLET = 2;
+
+	public static final String[] LOG_LEVELS = { "error", "warning", "info", "100", "90", "80", "70", "60", "50", "40", "30", "20", "10", "0" };
 	
+	private String logLevel;
 	private boolean isEmulator;
 	private int deviceType;
 	private ARadioMenuItem menuItem;
@@ -69,6 +72,7 @@ public class Device extends DevSourceItem {
 		// NOTE: the actual data is fed asynchronously, at least after initiating the device
 		this.installedApps = null;
 		this.setVersion("0");
+		this.setLogLevel("error", false);
 		
 		// set device menu item
 		this.menuItem = getDevtool().devwindow.menuBar.addDeviceToMenu(this);
@@ -87,32 +91,32 @@ public class Device extends DevSourceItem {
 		String name = inName.toLowerCase();
 		
 		if (name.contains("castle")) {
-			result = "Palm Pre";
+			name = "Palm Pre";
 		} else if (name.contains("pixie")) {
-			result = "Palm Pixi";
+			name = "Palm Pixi";
 		} else if (name.contains("verizon") && name.contains("pixie")) {
-			result = "Palm Pixi Plus";
+			name = "Palm Pixi Plus";
 		} else if (name.contains("castleplus")) {
-			result = "Palm Pre Plus";
+			name = "Palm Pre Plus";
 		} else if (name.contains("roadrunner")) {
-			result = "Palm Pre2";
+			name = "Palm Pre2";
 		} else if (name.contains("broadway")) {
-			result = "HP Veer";
+			name = "HP Veer";
 		} else if (name.contains("mantaray")) {
-			result = "HP Pre3";
+			name = "HP Pre3";
 		} else if (name.contains("topaz")) {
-			result = "HP TouchPad";
+			name = "HP TouchPad";
 		} else if (name.contains("opal")) {
-			result = "HP TouchPad Go";
+			name = "HP TouchPad Go";
 		} else if (name.contains("stingray")) {
-			result = "Stingray";
+			name = "Stingray";
 		} else if (name.contains("windsor")) {
-			result = "Windsor";
+			name = "Windsor";
 		} else if (name.contains("sdk") || name.contains("emulator")) {
-			result = "Emulator";
+			name = "Emulator";
 		}
 		
-		super.setName(newName);
+		super.setName(name);
 	}
 	
 	/**
@@ -160,6 +164,43 @@ public class Device extends DevSourceItem {
 	
 	public boolean isEmulator() {
 		return isEmulator;
+	}
+
+	public String getLogLevel() {
+		return this.logLevel;
+	}
+
+	/**
+	 * @return Index as <code>int</code> (-1 if not defined).
+	 */
+	public int getLogLevelIndex() {
+		for (int i = 0; i < Device.LOG_LEVELS.length; i++) {
+			if (Device.LOG_LEVELS[i].equals(this.logLevel)) {
+				return i;
+			}
+		}
+		return -1; // if search failed
+	}
+
+	/**
+	 * @param inLevel Log level to set as <code>String</code> (e.g., error|warning|info|0-100).
+	 * @param update Should the device itself be updated as well, instead of only internal variable.
+	 */
+	public void setLogLevel(String inLevel, boolean update) {
+		if (inLevel != null) {
+			this.logLevel = inLevel;
+			if (update) {
+				this.getDevtool().deviceSetLogLevel(this.getID(), inLevel);
+			}
+		}
+	}
+
+	/**
+	 * Accepts an index of <code>static Device.LOG_LEVELS</code>.
+	 * @see <code>setLogLevel(String, boolean)</code>.
+	 */
+	public void setLogLevel(int index, boolean update) {
+		this.setLogLevel(Device.LOG_LEVELS[index], update);
 	}
 	
 	public ARadioMenuItem getMenuItem() {

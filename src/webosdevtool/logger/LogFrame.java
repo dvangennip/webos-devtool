@@ -1,5 +1,6 @@
 package webosdevtool.logger;
 
+import webosdevtool.Device;
 import webosdevtool.AMenuItem;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -47,21 +49,22 @@ public class LogFrame extends JFrame {
 	private JScrollPane logScrollPane;
 	private JCheckBoxMenuItem logMenuToggleButton;
 	private JCheckBoxMenuItem logMenuClearOnRestart;
+	private JComboBox logLevelCombo;
 	
 	protected boolean loggingEnabled;
 	private boolean clearLogOnStart;
 	private boolean logFresh;
 	protected String appID;
-	protected String deviceID;
+	protected Device device;
 	private LogProcessor logProcessor;
 	
 	// constructor
-	public LogFrame (String appID, String deviceID) {
+	public LogFrame (String appID, Device device) {
 		
 		super("palm-log: "+appID);
-		
+
 		this.appID = appID;
-		this.deviceID = deviceID;
+		this.device = device;
 		
 		this.clearLogOnStart = false;
 		
@@ -156,7 +159,7 @@ public class LogFrame extends JFrame {
 		logTextPane.setEditable(false);
 		logTextPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		        
-		//Put the editor pane in a scroll pane.
+		// Put the editor pane in a scroll pane.
 		logScrollPane = new JScrollPane(logTextPane);
 		IAppWidgetFactory.makeIAppScrollPane(logScrollPane);
 		logScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -187,6 +190,15 @@ public class LogFrame extends JFrame {
 			}
 	    });
 	    logBottomBar.addComponentToCenter(toggleButton);
+	    // Log level selecter
+		logLevelCombo = new JComboBox(Device.LOG_LEVELS);
+		logLevelCombo.setSelectedIndex( this.device.getLogLevelIndex() );
+		logLevelCombo.addActionListener (new ActionListener () {
+			public void actionPerformed (ActionEvent e) {
+				setLogLevel(logLevelCombo.getSelectedIndex(), true);
+			}
+	    });
+		logBottomBar.addComponentToRight(logLevelCombo);
 		
 		logPanel = new JPanel(new BorderLayout());
 		logPanel.add(logScrollPane, BorderLayout.CENTER);
@@ -314,7 +326,7 @@ public class LogFrame extends JFrame {
 		commands.add("/bin/bash");
 		commands.add("/opt/PalmSDK/Current/bin/palm-log"); // palm-worm
 		commands.add("-f"); // follow until user quits it
-		commands.add("--device=" + deviceID ); // specify device
+		commands.add("--device=" + this.device.getID() ); // specify device
 		//commands.add("--system-log-level"); // log level
 		commands.add( appID ); // <package id>
 		
@@ -352,6 +364,21 @@ public class LogFrame extends JFrame {
 		} else {
 			// notify of no more activity
 			addContent("--- LOGGER STOPPED ----------------------------------\n");
+		}
+	}
+
+	/**
+	 * @param index Refers to the level chosen
+	 * @param createTask Set to true to dispatch a task, false if just to update GUI
+	 */
+	void setLogLevel(int index, boolean createTask) {
+		// update GUI to reflect changes
+		logLevelCombo.setSelectedIndex(index);
+
+		if (createTask) {
+			// TODO add task for current project
+			this.device.setLogLevel(index, true);
+			this.addContent("\nDevice log level set to: "+Device.LOG_LEVELS[index]+"\n");
 		}
 	}
 }

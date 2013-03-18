@@ -34,6 +34,7 @@ public class Task {
 	public static final int DEVICE_ENABLE_HOST_MODE = 34;
 	public static final int DEVICE_SCAN = 35;
 	public static final int DEVICE_LIST_APPS = 36;
+	public static final int DEVICE_LOG_LEVEL = 37;
 	
 	// Instance variables
 	
@@ -103,6 +104,7 @@ public class Task {
 			case DEVICE_LIST_APPS:			name = "List Apps for Device"; break;
 			case DEVICE_START:			 	name = "Start Device"; break;
 			case DEVICE_ENABLE_HOST_MODE:	name = "Enable Host Mode"; break;
+			case DEVICE_LOG_LEVEL:			name = "Set Device Log Level"; break;
 	   		default: 						name = "Unknown Task"; break;
 	   	}
 		
