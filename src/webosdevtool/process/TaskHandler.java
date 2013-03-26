@@ -461,7 +461,14 @@ public class TaskHandler extends Thread {
 	    commands.add("/bin/bash");
 	    commands.add("/opt/PalmSDK/Current/bin/palm-package"); // palm-package
 	    commands.add("--outdir=" + currentTask.getDevSourceItem().getLocation() + "/bin"); // -o <output location>
-	    commands.add( currentTask.getDevSourceItem().getLocation() + "/app_src"); // <source path>
+	    // if a deploy folder is found (which should contain a prepared bunch of sources) this folder is packaged instead
+	    // for example Enyo2 includes a deploy script which prepares the app in /deploy
+	    if ( FileOperator.checkFolderValidity(currentTask.getDevSourceItem().getLocation() + "/app_src/deploy/app_src") 
+	    	&& FileOperator.checkFileValidity(currentTask.getDevSourceItem().getLocation() + "/app_src/deploy/app_src/appinfo.json") ) {
+	    	commands.add( currentTask.getDevSourceItem().getLocation() + "/app_src/deploy/app_src"); // <source path>
+	    } else {
+	    	commands.add( currentTask.getDevSourceItem().getLocation() + "/app_src"); // <source path>
+	    }
 	    // include extra stuff if required
 	    if ( currentTask.getDevSourceItem().hasService() ) {
 	    	    commands.add( currentTask.getDevSourceItem().getLocation() + "/app_service"); // <service path>

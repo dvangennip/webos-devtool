@@ -28,7 +28,7 @@ Upon opening a project this tool checks whether the selected folder indeed conta
 #### Known quirks
 * Tasks are handled one by one but tasks do not time out, so the application may occassionally get stuck at one task (especially when a device is not responding, such as a booting emulator). There's currently no way around this except restarting the application.
 * The application does not save or remember anything.
-* Using the deploy functionality for Enyo2 projects suffers from path and working directory problems. This is fixed by adding a few lines to the project's `<boilerplate-folder>/tools/deploy.sh` file:
+* Using the deploy functionality for Enyo2 projects suffers from path and working directory problems. This is fixed by adding a few lines to the project's `<app_src>/tools/deploy.sh` file:
 
 
 ```sh
@@ -41,6 +41,18 @@ export PATH="/usr/local/bin:$PATH"
 
 # ADD THESE LINES BEFORE THE ONE THAT SAYS check for node, but quietly
 ```
+
+This developer tool will look for the minified application data in your `<app_src>/deploy` folder. However, the webOS packaging tools do give an error if the `appinfo.json` file is not included there (which it is not by default). So add its copying manually if you need it, as illustrated below. If `appinfo.json` is not found, this tool will revert to the regular packaging of `<app_src>`, including all the non-necessary stuff there.
+
+````sh
+# ADD THIS AFTER THE LINE: node "$DEPLOY" $@
+	# copy appinfo.json and framework_config
+	SRC="$TOOLS/../"
+	DEST="$TOOLS/../deploy/"${PWD##*/}
+
+	cp "$SRC"appinfo.json $DEST
+	cp "$SRC"framework_config.json $DEST
+````
 
 ### Installation
 If you intend on developing and/or modifying this application see below for compiler instructions. If your primary interest is to use this application please have a look at my website where the [latest version](http://project.sinds1984.nl/) can be found.

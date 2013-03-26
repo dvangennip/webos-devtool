@@ -152,9 +152,9 @@ public class Device extends DevSourceItem {
 		int noDotVersion = Integer.parseInt( getVersion().replaceAll("(\\d+)\\.{1}(\\d{1})\\.{1}(\\d{1})\\d*", "$1$2$3") );
 		// currently Enyo is only supported on webOS devices running versions 1.4.5+
 		if (noDotVersion >= 145) {
-			this.setEnyoEnabled(true);
+			this.setJSFrameworkType(1);
 		} else {
-			this.setEnyoEnabled(false);
+			this.setJSFrameworkType(0);
 		}
 	}
 	

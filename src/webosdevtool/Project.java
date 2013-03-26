@@ -79,19 +79,17 @@ public class Project extends DevSourceItem {
 		// get info on project, based on folder location
 		appInfo = this.getDevtool().fileOperator.getProjectAppInfo( getLocation() );
 		framework = this.getDevtool().fileOperator.getProjectFramework( getLocation() );
+		this.setJSFrameworkType( this.getDevtool().fileOperator.checkProjectFolderValidity( getLocation() ) );
+
 		sources = this.getDevtool().fileOperator.getProjectSources( getLocation() );
 		// check if some sources were returned, else it may be an Enyo app
 		if (sources == null) {
 			// get it again
 			sources = this.getDevtool().fileOperator.getProjectEnyoSources( getLocation() );
-			if (sources != null) {
-				// YEAH! there is data, so it must be an Enyo app
-				this.setEnyoEnabled(true);
-			}
 		}
-		// TODO: check for availability of package folder
+		// check for availability of package folder
 		hasPackage = this.getDevtool().fileOperator.checkFolderValidity(getLocation() + "/app_package");
-		// TODO: check for availability of service folder
+		// check for availability of service folder
 		hasService = this.getDevtool().fileOperator.checkFolderValidity(getLocation() + "/app_service");
 		// TODO: add service sources
 		/*if (hasService) {

@@ -23,7 +23,7 @@ public class DevSourceItem {
 	private Devtool devtool;
 	private boolean isDevice = false;
 	private boolean isEnabled = false;
-	private boolean enyoEnabled = false;
+	private int jsFrameworkType = 0;
 	private String name;
 	private String version;
 	private String uniqueID;
@@ -184,15 +184,25 @@ public class DevSourceItem {
 	 * @return True if Enyo framework is required / supported.
 	 */
 	public boolean isEnyoEnabled() {
-		return enyoEnabled;
+		return (this.jsFrameworkType > 0);
+	}
+
+	/**
+	 * @return The Enyo version as integer (0: no Enyo, 1: Enyo1, 2: Enyo2)
+	 */
+	public int getJSFrameworkType() {
+		return this.jsFrameworkType;
 	}
 	
 	/**
 	 * If the item supports (<code>Device</code>) or requires (<code>Project</code>) the Enyo framework it is set via this method.
-	 * @param b Boolean value which is set to true if Enyo is supported / required
+	 *
+	 * @see getJSFrameworkType For an overview of the values that can be set.
+	 * @param b Integer value which is set to the version of Enyo.
 	 */
-	public void setEnyoEnabled(boolean b) {
-		enyoEnabled = b;
+	public void setJSFrameworkType(int v) {
+		if (v >= 0)
+			this.jsFrameworkType = v;
 	}
 	
 	/**

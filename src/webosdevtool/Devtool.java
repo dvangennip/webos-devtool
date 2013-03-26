@@ -321,7 +321,7 @@ public class Devtool {
 				}
 				
 				// when project is OK
-				if ( fileOperator.checkProjectFolderValidity(projectFolder) ) {
+				if ( fileOperator.checkProjectFolderValidity(projectFolder) >= 0) {
 					
 					System.out.println("Folder valid: "+projectFolder);
 						

@@ -28,6 +28,12 @@ import com.google.gson.JsonParseException;
 public class FileOperator {
 	
 	// Variables
+
+	public static final int INVALID = -1;
+	public static final int OTHER = 0;
+	public static final int MOJO = 1;
+	public static final int ENYO1 = 2;
+	public static final int ENYO2 = 3;
 	
 	// Constructor
 	
@@ -41,37 +47,34 @@ public class FileOperator {
 	 * It also checks the validity of its appinfo.json and sources.json files.
 	 *
 	 * @param projectFolder Location of the project folder.
-	 * @return True if the project is found to be valid.
+	 * @return See public static variables.
 	 */
-	public static boolean checkProjectFolderValidity (String projectFolder) {
+	public static int checkProjectFolderValidity (String projectFolder) {
 	    
 	    // check if project folder is valid
-		if ( !checkFolderValidity(projectFolder) ) {
-			return false;
-		}
+		if ( !checkFolderValidity(projectFolder) )
+			return INVALID;
 		// check if src folder is valid
-		if ( !checkFolderValidity(projectFolder + "/app_src") ) {
-			return false;
-		}
+		if ( !checkFolderValidity(projectFolder + "/app_src") )
+			return INVALID;
 		// check if bin folder is valid
-		if ( !checkFolderValidity(projectFolder + "/bin") ) {
-			return false;
-		}
+		if ( !checkFolderValidity(projectFolder + "/bin") )
+			return INVALID;
 		// check if appinfo.json is valid
-		if ( !checkAppInfoFileValidity(projectFolder) ) {
-			return false;
-		}
+		if ( !checkAppInfoFileValidity(projectFolder) )
+			return INVALID;
+		// perhaps it is an Enyo1 framework application
+		if (checkDependsFileValidity(projectFolder))
+			return ENYO1;
+		// or Enyo2
+		if (checkPackageFileValidity(projectFolder))
+			return ENYO2;
 		// check if sources.json is valid (Mojo apps only)
-		if ( !checkSourcesFileValidity(projectFolder) ) {
-			// if not valid perhaps it is an Enyo framework application
-			if ( !checkDependsFileValidity(projectFolder) && !checkPackageFileValidity(projectFolder)) {
-				// when also wrong, the folder is just wrong
-				return false;
-			}
-		}
-		
-		// if no problems occured folder structure is valid
-		return true;
+		if ( checkSourcesFileValidity(projectFolder) )
+			return MOJO;
+				
+		// if no problems occured folder structure is valid (but no Mojo or Enyo)
+		return 0;
 	}
 	
 	/**
